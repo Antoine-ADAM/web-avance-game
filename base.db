@@ -1,0 +1,22 @@
+CREATE TABLE IF NOT EXISTS user (
+            id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+            x INT(3) NOT NULL,
+            y INT(3) NOT NULL,
+            name VARCHAR(16) NOT NULL UNIQUE,
+            password VARCHAR(255) NOT NULL,
+            color VARCHAR(7) NOT NULL,
+            levelIndustry INT(6) NOT NULL,
+            levelEnergy INT(6) NOT NULL,
+            nbIndustry INT(6) NOT NULL,
+            nbEnergy INT(6) NOT NULL,
+            nbCannon INT(6) NOT NULL,
+            nbOffensiveTroop INT(6) NOT NULL,
+            nbLogisticTroop INT(6) NOT NULL
+        );
+
+create table last_update
+(
+    last_update datetime default now() null
+);
+
+INSERT INTO last_update (last_update) VALUES (NOW());
