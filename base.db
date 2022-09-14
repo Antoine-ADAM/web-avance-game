@@ -20,3 +20,26 @@ create table last_update
 );
 
 INSERT INTO last_update (last_update) VALUES (NOW());
+
+CREATE TABLE IF NOT EXISTS attack_event (
+                                            id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+                                            idAttacker INT(6) UNSIGNED NOT NULL,
+                                            idDefender INT(6) UNSIGNED NOT NULL,
+                                            finalDateTime DATETIME NOT NULL,
+                                            startDateTime DATETIME NOT NULL,
+                                            nbCannon INT(6) UNSIGNED NOT NULL,
+                                            nbOffensiveTroop INT(6) UNSIGNED NOT NULL,
+                                            status INT(6) UNSIGNED NOT NULL,
+                                            nbCannonRemainingWinner INT(6) UNSIGNED,
+                                            nbOffensiveTroopRemainingWinner INT(6) UNSIGNED,
+                                            nbEnergySteal INT(6) UNSIGNED,
+                                            nbIndustrySteal INT(6) UNSIGNED,
+                                            nbCannonRemainingDefenderLoser INT(6) UNSIGNED,
+                                            nbOffensiveTroopRemainingDefenderLoser INT(6) UNSIGNED,
+                                            defenderX INT(6) UNSIGNED NOT NULL,
+                                            defenderY INT(6) UNSIGNED NOT NULL,
+                                            attackerX INT(6) UNSIGNED NOT NULL,
+                                            attackerY INT(6) UNSIGNED NOT NULL,
+                                            FOREIGN KEY (idAttacker) REFERENCES user(id),
+                                            FOREIGN KEY (idDefender) REFERENCES user(id)
+);

@@ -9,6 +9,7 @@ function createAccount(){
     if(isset($color) && isset($name) && isset($password) && $user->setColor($color) && $user->setName($name) && $user->setPassword($password)){
         $user->save();
     }
+
 }
 function login(){
     $name = $_POST['name'];

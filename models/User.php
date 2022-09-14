@@ -34,7 +34,7 @@ class User
     public function setName($name)
     {
         # verfiy name with regex [a-zA-Z0-9]{3,16}
-        if (preg_match('/^[a-zA-Z0-9]{3,16}$/', $name)) {
+        if (preg_match('/^[a-zA-Z0-9_]{3,16}$/', $name)) {
             $this->name = $name;
             return true;
         }
@@ -91,8 +91,23 @@ class User
 
     public function create()
     {
+        # test if user already exist
+        if ($db->query("SELECT id FROM user WHERE name = ?", [$this->name])->fetch()) {
+            return false;
+        }
+
         $x = rand(0, 500);
         $y = rand(0, 500);
+        $max = 20;
+        while (!$db->query("SELECT id FROM user WHERE x=? AND y=?", [$x, $y])->fetch() && $max > 0){
+            $x = rand(0, 500);
+            $y = rand(0, 500);
+            $max--;
+        }
+        if($max == 0){
+            die("TOO USERS");
+        }
+
         # create user
         $res = $db->query("INSERT INTO user (x, y, name, password, color, levelIndustry, levelEnergy, nbIndustry, nbEnergy, nbCannon, nbOffensiveTroop, nbLogisticTroop) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [$x, $y, $this->name, $this->password, $this->color, $this->levelIndustry, $this->levelEnergy, $this->nbIndustry, $this->nbEnergy, $this->nbCannon, $this->nbOffensiveTroop, $this->nbLogisticTroop]);
         if ($res) {
