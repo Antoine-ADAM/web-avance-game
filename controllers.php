@@ -58,12 +58,11 @@ function purchase(){
     $user = $_SESSION["user"];
     $type = $_POST['type'];
     $nb = $_POST['nb'];
-    if(isset($type) && isset($nb) && $user->purchase($type, $nb) && $user->update()){
+    if(isset($type) && isset($nb) && is_numeric($nb) && $user->purchase($type, intval($nb)) && $user->update()){
         Pages::returnJSON(["success" => "purchase done"]);
     }
     Pages::returnJSON(["error" => "purchase failed"]);
 }
-
 function levelUp(){
     if(!isLogged())
         Pages::returnJSON(["error" => "not logged"]);
@@ -91,6 +90,7 @@ function attack(){
     Pages::returnJSON(["error" => "attack failed"]);
 }
 
+
 function home(){
     if(isLogged())
         Pages::redirect(Pages::GAME);
@@ -101,7 +101,7 @@ function game(){
     if(!isLogged())
         Pages::redirect(Pages::HOME);
     $user = $_SESSION["user"];
-    $users = User::getAllUser();
+    $users = User::getAllUsers();
     $attackEvents = AttackEvent::getAttackEventByUserId($user->getId());
     Pages::render("game.php", ["user" => $user, "users" => $users, "attackEvents" => $attackEvents]);
 }

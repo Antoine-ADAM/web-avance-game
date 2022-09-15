@@ -27,17 +27,17 @@ class User
         return $user;
     }
 
-    public static function getAllUser()
+    public static function getAllUsers()
     {
         $db = MyDB::getDB();
         $result = $db->query("SELECT * FROM user");
         $users = [];
         while ($row = $result->fetch_assoc()) {
             $user = new User();
-            if($user->loadFromResult($row)){
-                $users[] = $user;
-            }
+            $user->loadFromResult($row);
+            $users[] = $user;
         }
+
         return $users;
     }
 
@@ -182,7 +182,7 @@ class User
 
     function loadFromId($id){
         $res = MyDB::query("SELECT * FROM user WHERE id = ?", [$id]);
-        if ($res) {
+        if ($res && $res=$res->fetch_assoc()) {
             $this->loadFromResult($res);
             return true;
         }
@@ -297,12 +297,19 @@ UPDATE last_update SET last_update = NOW() WHERE 1;");
     public function getId(){
         return $this->id;
     }
-
+    const PURCHASES = [
+        "cannon",
+        "offensiveTroop",
+        "logisticTroop"
+    ];
     /**
      * type: "cannon", "offensiveTroop", "logisticTroop"
      * @return bool
      */
     public function purchase($type, $nb){
+        if($nb <= 0){
+            return false;
+        }
         switch($type){
             case "cannon":
                 return $this->cannonPurchase($nb);
@@ -314,6 +321,10 @@ UPDATE last_update SET last_update = NOW() WHERE 1;");
         return false;
     }
 
+    const UPGRADES = [
+        "industry",
+        "energy"
+    ];
     public function levelUp($type){
         switch($type){
             case "industry":
@@ -332,9 +343,8 @@ UPDATE last_update SET last_update = NOW() WHERE 1;");
         return $attackEvent->create($this->id, $idDefender, $nbCannon, $nbOffensiveTroop, $nbLogisticTroop);
     }
 
-    function loadFromResult($res)
+    function loadFromResult($user)
     {
-        if(gettype($res)=="mysqli_result" && $user = $res->fetch_assoc()){
             $this->id = $user['id'];
             $this->name = $user['name'];
             $this->password = $user['password'];
@@ -348,12 +358,39 @@ UPDATE last_update SET last_update = NOW() WHERE 1;");
             $this->nbLogisticTroop = $user['nbLogisticTroop'];
             $this->x = $user['x'];
             $this->y = $user['y'];
-            return true;
-        }
-        return false;
     }
 
     function getScores(){
         return $this->nbCannon*15 + $this->nbOffensiveTroop*10 + $this->nbLogisticTroop*10 + -200*(1-pow(2, $this->levelEnergy))+ -200*(1-pow(2, $this->levelIndustry));
     }
+
+    function getLevelIndustry(){
+        return $this->levelIndustry;
+    }
+    function getLevelEnergy(){
+        return $this->levelEnergy;
+    }
+    function getNbIndustry(){
+        return $this->nbIndustry;
+    }
+    function getNbEnergy(){
+        return $this->nbEnergy;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getColor()
+    {
+        return $this->color;
+    }
+
 }

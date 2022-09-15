@@ -281,5 +281,61 @@ class AttackEvent
         return $events;
     }
 
+    function getFinalDateTime()
+    {
+        return $this->finalDateTime;
+    }
+    function getStartDateTime()
+    {
+        return $this->startDateTime;
+    }
+    function getId()
+    {
+        return $this->id;
+    }
+    /**
+     * @return mixed
+     */
+    public function getDefenderX()
+    {
+        return $this->defenderX;
+    }
 
+    /**
+     * @return mixed
+     */
+    public function getDefenderY()
+    {
+        return $this->defenderY;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAttackerX()
+    {
+        return $this->attackerX;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAttackerY()
+    {
+        return $this->attackerY;
+    }
+
+    public function actualPosition(){
+        if($this->status != 0)
+            return false;
+        $start = new DateTime($this->startDateTime);
+        $final = new DateTime($this->finalDateTime);
+        $now = new DateTime();
+        $diff = $now->diff($start);
+        $diff2 = $final->diff($start);
+        $percent = $diff->format('%r%a') / $diff2->format('%r%a');
+        $x = $this->attackerX + ($this->defenderX - $this->attackerX) * $percent;
+        $y = $this->attackerY + ($this->defenderY - $this->attackerY) * $percent;
+        return [$x, $y];
+    }
 }
