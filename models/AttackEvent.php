@@ -265,9 +265,9 @@ class AttackEvent
 
     static function updateEvent(){
         $res = MyDB::getDB()->query("SELECT * FROM attack_event WHERE finalDateTime < NOW()");
-        while ($res) {
+        while ($res && $res = $res->fetch_assoc()) {
             $event = new AttackEvent();
-            $event->loadFromResponseSql($res->fetch_assoc());
+            $event->loadFromResponseSql($res);
             $event->attack();
         }
     }

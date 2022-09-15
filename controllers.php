@@ -1,6 +1,7 @@
 <?php
 require_once 'models/User.php';
 require_once 'models/Pages.php';
+require_once 'models/AttackEvent.php';
 
 
 function init(){

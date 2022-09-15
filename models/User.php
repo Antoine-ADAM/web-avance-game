@@ -34,8 +34,9 @@ class User
         $users = [];
         while ($row = $result->fetch_assoc()) {
             $user = new User();
-            $user->loadFromResult($row);
-            $users[] = $user;
+            if($user->loadFromResult($row)){
+                $users[] = $user;
+            }
         }
         return $users;
     }
@@ -76,7 +77,7 @@ class User
         if (strlen($password) < 8) {
             return false;
         }
-        $this->password = password_hash($password, ALGO_HASH);
+        $this->password = $password;
         return true;
     }
 
@@ -148,7 +149,7 @@ class User
         }
 
         # create user
-        $res = MyDB::query("INSERT INTO user (x, y, name, password, color, levelIndustry, levelEnergy, nbIndustry, nbEnergy, nbCannon, nbOffensiveTroop, nbLogisticTroop) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [$x, $y, $this->name, $this->password, $this->color, 0, 0, 500, 0, 0, 0, 0]);
+        $res = MyDB::query("INSERT INTO user (x, y, name, password, color, levelIndustry, levelEnergy, nbIndustry, nbEnergy, nbCannon, nbOffensiveTroop, nbLogisticTroop) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [$x, $y, $this->name, password_hash($this->password, ALGO_HASH), $this->color, 0, 0, 500, 0, 0, 0, 0]);
         if ($res) {
             $this->id = $res->fetch_assoc()['id'];
             return true;
@@ -159,9 +160,8 @@ class User
     public function login()
     {
         # login user
-        $res = MyDB::getDB()->query("SELECT * FROM user WHERE name = ? AND password ?", [$this->name, $this->password]);
-        if ($res) {
-            $user = $res->fetch_assoc();
+        $user = MyDB::query("SELECT * FROM user WHERE name LIKE ?", [$this->name])->fetch_assoc();
+        if ($user && password_verify($this->password, $user['password'])) {
             $this->id = $user['id'];
             $this->name = $user['name'];
             $this->password = $user['password'];
@@ -181,7 +181,7 @@ class User
     }
 
     function loadFromId($id){
-        $res = MyDB::getDB()->query("SELECT * FROM user WHERE id = ?", [$id]);
+        $res = MyDB::query("SELECT * FROM user WHERE id = ?", [$id]);
         if ($res) {
             $this->loadFromResult($res);
             return true;
@@ -190,9 +190,14 @@ class User
     }
 
     static public function updateNbIndustryAll(){
-        return true == MyDB::getDB()->query("SET @delta = (SELECT TIMESTAMPDIFF(SECOND, last_update, NOW()) FROM last_update);
+        MyDB::getDB()->multi_query("SET @delta = (SELECT TIMESTAMPDIFF(SECOND, last_update, NOW()) FROM last_update);
 UPDATE user SET nbIndustry = nbIndustry + @delta * POW(2, levelIndustry);
 UPDATE last_update SET last_update = NOW() WHERE 1;");
+        do {
+            if ($result = MyDB::getDB()->store_result()) {
+                $result->free();
+            }
+        } while (MyDB::getDB()->more_results() && MyDB::getDB()->next_result());
     }
 
     public function getNbCannon()
@@ -319,20 +324,23 @@ UPDATE last_update SET last_update = NOW() WHERE 1;");
 
     function loadFromResult($res)
     {
-        $user = $res->fetch_assoc();
-        $this->id = $user['id'];
-        $this->name = $user['name'];
-        $this->password = $user['password'];
-        $this->color = $user['color'];
-        $this->levelIndustry = $user['levelIndustry'];
-        $this->levelEnergy = $user['levelEnergy'];
-        $this->nbIndustry = $user['nbIndustry'];
-        $this->nbEnergy = $user['nbEnergy'];
-        $this->nbCannon = $user['nbCannon'];
-        $this->nbOffensiveTroop = $user['nbOffensiveTroop'];
-        $this->nbLogisticTroop = $user['nbLogisticTroop'];
-        $this->x = $user['x'];
-        $this->y = $user['y'];
+        if(gettype($res)=="mysqli_result" && $user = $res->fetch_assoc()){
+            $this->id = $user['id'];
+            $this->name = $user['name'];
+            $this->password = $user['password'];
+            $this->color = $user['color'];
+            $this->levelIndustry = $user['levelIndustry'];
+            $this->levelEnergy = $user['levelEnergy'];
+            $this->nbIndustry = $user['nbIndustry'];
+            $this->nbEnergy = $user['nbEnergy'];
+            $this->nbCannon = $user['nbCannon'];
+            $this->nbOffensiveTroop = $user['nbOffensiveTroop'];
+            $this->nbLogisticTroop = $user['nbLogisticTroop'];
+            $this->x = $user['x'];
+            $this->y = $user['y'];
+            return true;
+        }
+        return false;
     }
 
     function getScores(){

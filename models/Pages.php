@@ -25,6 +25,7 @@ class Pages
 
     static function redirect($page, $params = [])
     {
+        return;
         header("Location: " . Pages::toURL($page, $params));
         exit();
     }
