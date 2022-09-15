@@ -25,6 +25,9 @@ switch ($_GET['page']){
     case Pages::ATTACK:
         attack();
         break;
+    case Pages::LEVEL_UP:
+        levelUp();
+        break;
     default:
         Pages::redirect(Pages::HOME);
         break;

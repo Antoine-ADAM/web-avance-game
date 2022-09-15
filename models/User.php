@@ -109,6 +109,7 @@ class User
         if($this->nbIndustry >= $cost[0] && $this->nbEnergy >= $cost[1]){
             $this->nbIndustry -= $cost[0];
             $this->nbEnergy -= $cost[1];
+            $this->nbEnergy+=200*pow(2, $this->levelEnergy);
             $this->levelEnergy++;
             return true;
         }
