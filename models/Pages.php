@@ -38,6 +38,6 @@ class Pages
     static function render($page, $params = [])
     {
         extract($params);
-        require_once "../views/$page";
+        require_once "views/$page";
     }
 }

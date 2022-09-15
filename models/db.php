@@ -8,7 +8,7 @@ class MyDB{
     public $db;
 
     function __construct(){
-        require_once "../config.php";
+        require_once "config.php";
         $this->db = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
         if ($this->db->connect_error) {
             die("Connection failed: " . $this->db->connect_error);
