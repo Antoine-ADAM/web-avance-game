@@ -202,6 +202,74 @@ class AttackEvent
         }
     }
 
+    public function getNbCannonLossAttacker()
+    {
+        return $this->nbCannonLossAttacker;
+    }
+
+    public function getNbOffensiveTroopLossAttacker()
+    {
+        return $this->nbOffensiveTroopLossAttacker;
+    }
+
+    public function getNbLogisticTroopLossAttacker()
+    {
+        return $this->nbLogisticTroopLossAttacker;
+    }
+
+    public function getNbCannonLossDefender()
+    {
+        return $this->nbCannonLossDefender;
+    }
+
+    public function getNbOffensiveTroopLossDefender()
+    {
+        return $this->nbOffensiveTroopLossDefender;
+    }
+
+    public function getNbLogisticTroopLossDefender()
+    {
+        return $this->nbLogisticTroopLossDefender;
+    }
+
+    public function getNbIndustrySteal()
+    {
+        return $this->nbIndustrySteal;
+    }
+
+    public function getNbCannon()
+    {
+        return $this->nbCannon;
+    }
+
+    public function getNbOffensiveTroop()
+    {
+        return $this->nbOffensiveTroop;
+    }
+
+    public function getNbLogisticTroop()
+    {
+        return $this->nbLogisticTroop;
+    }
+
+    public function getIdAttacker()
+    {
+        return $this->idAttacker;
+    }
+
+    public function getIdDefender()
+    {
+        return $this->idDefender;
+    }
+    /**
+     * 0 is in progress, 1 is won for attacker, 2 is lost for attacker, 3 battle without winner
+     * @return int
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
     static function updateEvent(){
         $res = MyDB::getDB()->query("SELECT * FROM attack_event WHERE finalDateTime < NOW()");
         while ($res) {

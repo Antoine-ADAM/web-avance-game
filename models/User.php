@@ -29,6 +29,7 @@ class User
             $this->color = strtoupper($color);
             return true;
         }
+        return false;
     }
 
     public function setName($name)
@@ -202,5 +203,64 @@ UPDATE last_update SET last_update = NOW() WHERE 1;");
     public function setNbIndustry($nbIndustry)
     {
         $this->nbIndustry = $nbIndustry;
+    }
+
+    public function cannonPurchase($nbCannon)
+    {
+        $cost = $this->getCostCannon($nbCannon);
+        if($this->nbIndustry >= $cost[0] && $this->nbEnergy >= $cost[1]){
+            $this->nbIndustry -= $cost[0];
+            $this->nbEnergy -= $cost[1];
+            $this->nbCannon += $nbCannon;
+            return true;
+        }
+        return false;
+    }
+
+    private function getCostCannon($nbCannon)
+    {
+        return [15 * $nbCannon,2 * $nbCannon];
+    }
+
+    public function offensiveTroopPurchase($nbOffensiveTroop)
+    {
+        $cost = $this->getCostOffensiveTroop($nbOffensiveTroop);
+        if($this->nbIndustry >= $cost[0] && $this->nbEnergy >= $cost[1]){
+            $this->nbIndustry -= $cost[0];
+            $this->nbEnergy -= $cost[1];
+            $this->nbOffensiveTroop += $nbOffensiveTroop;
+            return true;
+        }
+        return false;
+    }
+
+    private function getCostOffensiveTroop($nbOffensiveTroop)
+    {
+        return [10 * $nbOffensiveTroop, 0];
+    }
+
+    public function logisticTroopPurchase($nbLogisticTroop)
+    {
+        $cost = $this->getCostLogisticTroop($nbLogisticTroop);
+        if($this->nbIndustry >= $cost[0] && $this->nbEnergy >= $cost[1]){
+            $this->nbIndustry -= $cost[0];
+            $this->nbEnergy -= $cost[1];
+            $this->nbLogisticTroop += $nbLogisticTroop;
+            return true;
+        }
+        return false;
+    }
+
+    private function getCostLogisticTroop($nbLogisticTroop)
+    {
+        return [10 * $nbLogisticTroop, 0];
+    }
+
+    public function getX(){
+        return $this->x;
+    }
+
+    public function getY(){
+        return $this->y;
     }
 }
