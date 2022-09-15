@@ -1,5 +1,0 @@
-db:
-  host: localhost
-  user: USER
-  password: MDP
-  database: DATABASE

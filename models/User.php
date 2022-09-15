@@ -84,22 +84,22 @@ class User
         return false;
     }
 
-    public function update(){
+    public function save(){
         # update levelIndustry, levelEnergy, nbIndustry, nbEnergy, nbCannon, nbOffensiveTroop, nbLogisticTroop
-        return true == $db->query("UPDATE user SET levelIndustry = ?, levelEnergy = ?, nbIndustry = ?, nbEnergy = ?, nbCannon = ?, nbOffensiveTroop = ?, nbLogisticTroop = ? WHERE id = ?", [$this->levelIndustry, $this->levelEnergy, $this->nbIndustry, $this->nbEnergy, $this->nbCannon, $this->nbOffensiveTroop, $this->nbLogisticTroop, $this->id]);
+        return true == MyDB::getDB()->query("UPDATE user SET levelIndustry = ?, levelEnergy = ?, nbIndustry = ?, nbEnergy = ?, nbCannon = ?, nbOffensiveTroop = ?, nbLogisticTroop = ? WHERE id = ?", [$this->levelIndustry, $this->levelEnergy, $this->nbIndustry, $this->nbEnergy, $this->nbCannon, $this->nbOffensiveTroop, $this->nbLogisticTroop, $this->id]);
     }
 
     public function create()
     {
         # test if user already exist
-        if ($db->query("SELECT id FROM user WHERE name = ?", [$this->name])->fetch()) {
+        if (MyDB::getDB()->query("SELECT id FROM user WHERE name = ?", [$this->name])->fetch()) {
             return false;
         }
 
         $x = rand(0, 500);
         $y = rand(0, 500);
         $max = 20;
-        while (!$db->query("SELECT id FROM user WHERE x=? AND y=?", [$x, $y])->fetch() && $max > 0){
+        while (!MyDB::getDB()->query("SELECT id FROM user WHERE x=? AND y=?", [$x, $y])->fetch() && $max > 0){
             $x = rand(0, 500);
             $y = rand(0, 500);
             $max--;
@@ -109,7 +109,7 @@ class User
         }
 
         # create user
-        $res = $db->query("INSERT INTO user (x, y, name, password, color, levelIndustry, levelEnergy, nbIndustry, nbEnergy, nbCannon, nbOffensiveTroop, nbLogisticTroop) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [$x, $y, $this->name, $this->password, $this->color, $this->levelIndustry, $this->levelEnergy, $this->nbIndustry, $this->nbEnergy, $this->nbCannon, $this->nbOffensiveTroop, $this->nbLogisticTroop]);
+        $res = MyDB::getDB()->query("INSERT INTO user (x, y, name, password, color, levelIndustry, levelEnergy, nbIndustry, nbEnergy, nbCannon, nbOffensiveTroop, nbLogisticTroop) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [$x, $y, $this->name, $this->password, $this->color, $this->levelIndustry, $this->levelEnergy, $this->nbIndustry, $this->nbEnergy, $this->nbCannon, $this->nbOffensiveTroop, $this->nbLogisticTroop]);
         if ($res) {
             $this->id = $res->fetch_assoc()['id'];
             return true;
@@ -120,7 +120,29 @@ class User
     public function login()
     {
         # login user
-        $res = $db->query("SELECT * FROM user WHERE name = ? AND password ?", [$this->name, $this->password]);
+        $res = MyDB::getDB()->query("SELECT * FROM user WHERE name = ? AND password ?", [$this->name, $this->password]);
+        if ($res) {
+            $user = $res->fetch_assoc();
+            $this->id = $user['id'];
+            $this->name = $user['name'];
+            $this->password = $user['password'];
+            $this->color = $user['color'];
+            $this->levelIndustry = $user['levelIndustry'];
+            $this->levelEnergy = $user['levelEnergy'];
+            $this->nbIndustry = $user['nbIndustry'];
+            $this->nbEnergy = $user['nbEnergy'];
+            $this->nbCannon = $user['nbCannon'];
+            $this->nbOffensiveTroop = $user['nbOffensiveTroop'];
+            $this->nbLogisticTroop = $user['nbLogisticTroop'];
+            $this->x = $user['x'];
+            $this->y = $user['y'];
+            return true;
+        }
+        return false;
+    }
+
+    function loadFromId($id){
+        $res = MyDB::getDB()->query("SELECT * FROM user WHERE id = ?", [$id]);
         if ($res) {
             $user = $res->fetch_assoc();
             $this->id = $user['id'];
@@ -142,8 +164,43 @@ class User
     }
 
     static public function updateNbIndustryAll(){
-        return true == $db->query("SET @delta = (SELECT TIMESTAMPDIFF(SECOND, last_update, NOW()) FROM last_update);
+        return true == MyDB::getDB()->query("SET @delta = (SELECT TIMESTAMPDIFF(SECOND, last_update, NOW()) FROM last_update);
 UPDATE user SET nbIndustry = nbIndustry + @delta * POW(2, levelIndustry);
 UPDATE last_update SET last_update = NOW() WHERE 1;");
+    }
+
+    public function getNbCannon()
+    {
+        return $this->nbCannon;
+    }
+
+    public function getNbOffensiveTroop()
+    {
+        return $this->nbOffensiveTroop;
+    }
+
+    public function getNbLogisticTroop()
+    {
+        return $this->nbLogisticTroop;
+    }
+
+    public function setNbCannon($nbCannon)
+    {
+        $this->nbCannon = $nbCannon;
+    }
+
+    public function setNbOffensiveTroop($nbOffensiveTroop)
+    {
+        $this->nbOffensiveTroop = $nbOffensiveTroop;
+    }
+
+    public function setNbLogisticTroop($nbLogisticTroop)
+    {
+        $this->nbLogisticTroop = $nbLogisticTroop;
+    }
+
+    public function setNbIndustry($nbIndustry)
+    {
+        $this->nbIndustry = $nbIndustry;
     }
 }
