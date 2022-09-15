@@ -43,6 +43,9 @@ class AttackEvent
 
     function create($idAttacker, $idDefender, $nbCannon, $nbOffensiveTroop, $nbLogisticTroop)
     {
+        if ($idAttacker == $idDefender) {
+            return false;
+        }
         $this->idAttacker = $idAttacker;
         $this->idDefender = $idDefender;
         $this->nbCannon = $nbCannon;
