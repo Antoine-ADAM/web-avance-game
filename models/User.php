@@ -87,7 +87,7 @@ class User
         return [200 * $factor, 10 * $factor];
     }
 
-    function upgradeIndustry(){
+    function levelUpIndustry(){
         $cost = $this->getCostLevelupIndustry();
         if($this->nbIndustry >= $cost[0] && $this->nbEnergy >= $cost[1]){
             $this->nbIndustry -= $cost[0];
@@ -104,7 +104,7 @@ class User
         return [100 * $factor, 0];
     }
 
-    function upgradeEnergy(){
+    function levelUpEnergy(){
         $cost = $this->getCostLevelupEnergy();
         if($this->nbIndustry >= $cost[0] && $this->nbEnergy >= $cost[1]){
             $this->nbIndustry -= $cost[0];
@@ -310,6 +310,16 @@ UPDATE last_update SET last_update = NOW() WHERE 1;");
                 return $this->offensiveTroopPurchase($nb);
             case "logisticTroop":
                 return $this->logisticTroopPurchase($nb);
+        }
+        return false;
+    }
+
+    public function levelUp($type){
+        switch($type){
+            case "industry":
+                return $this->levelUpIndustry();
+            case "energy":
+                return $this->levelUpEnergy();
         }
         return false;
     }

@@ -11,6 +11,7 @@ class Pages
     const REGISTER = "register";
     const LOGOUT = "logout";
     const PURCHASE = "purchase";
+    const LEVEL_UP = "levelUp";
     const ATTACK = "attack";
 
 
@@ -25,7 +26,6 @@ class Pages
 
     static function redirect($page, $params = [])
     {
-        return;
         header("Location: " . Pages::toURL($page, $params));
         exit();
     }

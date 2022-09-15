@@ -49,22 +49,20 @@ class AttackEvent
         $this->nbOffensiveTroop = $nbOffensiveTroop;
         $this->nbLogisticTroop = $nbLogisticTroop;
         #I don't use the relativity convention in sql to avoid "joins" everywhere
-        $res = MyDB::getDB()->query("SELECT x, y FROM user WHERE id = $idDefender");
-        if ($res) {
-            $user = $res->fetch_assoc();
+        $res = MyDB::query("SELECT x, y FROM user WHERE id = ?", [$idDefender]);
+        if ($res && $user = $res->fetch_assoc()) {
             $this->defenderX = $user['x'];
             $this->defenderY = $user['y'];
         }
-        $res = MyDB::getDB()->query("SELECT x, y FROM user WHERE id = $idAttacker");
-        if ($res) {
-            $user = $res->fetch_assoc();
+        $res = MyDB::query("SELECT x, y FROM user WHERE id = ?", [$idAttacker]);
+        if ($res && $user = $res->fetch_assoc()) {
             $this->attackerX = $user['x'];
             $this->attackerY = $user['y'];
         }
         $this->startDateTime = date('Y-m-d H:i:s');
         $this->finalDateTime = date('Y-m-d H:i:s', time()+round(pow(pow($this->attackerX-$this->defenderX, 2)+pow($this->attackerY-$this->defenderY, 2), 0.5))*5);
         $this->status = 0;
-        $res = MyDB::getDB()->query("INSERT INTO attack_event (idAttacker, idDefender, finalDateTime, startDateTime, nbCannon, nbOffensiveTroop, status, defenderX, defenderY, attackerX, attackerY) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [$this->idAttacker, $this->idDefender, $this->finalDateTime, $this->startDateTime, $this->nbCannon, $this->nbOffensiveTroop, $this->status, $this->defenderX, $this->defenderY, $this->attackerX, $this->attackerY]);
+        $res = MyDB::query("INSERT INTO attack_event (idAttacker, idDefender, finalDateTime, startDateTime, nbCannon, nbOffensiveTroop, nbLogisticTroop, status, defenderX, defenderY, attackerX, attackerY) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [$this->idAttacker, $this->idDefender, $this->finalDateTime, $this->startDateTime, $this->nbCannon, $this->nbOffensiveTroop, $this->nbLogisticTroop, $this->status, $this->defenderX, $this->defenderY, $this->attackerX, $this->attackerY]);
         return $res!=false;
     }
 
@@ -275,9 +273,9 @@ class AttackEvent
     static function getAllEvent(){
         $res = MyDB::getDB()->query("SELECT * FROM attack_event");
         $events = [];
-        while ($res) {
+        while ($res && $row = $res->fetch_assoc()) {
             $event = new AttackEvent();
-            $event->loadFromResponseSql($res->fetch_assoc());
+            $event->loadFromResponseSql($row);
             $events[] = $event;
         }
         return $events;

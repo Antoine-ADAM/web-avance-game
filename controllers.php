@@ -58,10 +58,21 @@ function purchase(){
     $user = $_SESSION["user"];
     $type = $_POST['type'];
     $nb = $_POST['nb'];
-    if(isset($type) && isset($nb) && $user->purchase($type, $nb)){
+    if(isset($type) && isset($nb) && $user->purchase($type, $nb) && $user->update()){
         Pages::returnJSON(["success" => "purchase done"]);
     }
     Pages::returnJSON(["error" => "purchase failed"]);
+}
+
+function levelUp(){
+    if(!isLogged())
+        Pages::returnJSON(["error" => "not logged"]);
+    $user = $_SESSION["user"];
+    $type = $_POST['type'];
+    if(isset($type) && $user->levelUp($type) && $user->update()){
+        Pages::returnJSON(["success" => "level up done"]);
+    }
+    Pages::returnJSON(["error" => "level up failed"]);
 }
 
 function attack(){
