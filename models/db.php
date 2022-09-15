@@ -23,4 +23,30 @@ class MyDB{
         }
         return self::$instance->db;
     }
+
+    const TYPES = [
+        "string" => "s",
+        "int" => "i",
+        "integer" => "i",
+        "double" => "d",
+        "date" => "s",
+    ];
+
+    /**
+     * @param string $query
+     * @param array $params
+     * @return bool|mysqli_result
+     */
+    public static function query(string $string, array $array=[])
+    {
+        $db = self::getDB();
+        $stmt = $db->prepare($string);
+        $types = "";
+        foreach ($array as $item) {
+            $types .= self::TYPES[gettype($item)];
+        }
+        $stmt->bind_param($types,...$array);
+        $stmt->execute();
+        return $stmt->get_result();
+    }
 }

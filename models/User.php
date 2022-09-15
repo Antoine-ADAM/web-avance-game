@@ -131,14 +131,14 @@ class User
         }
 
         # test if user already exist
-        if (MyDB::getDB()->query("SELECT id FROM user WHERE name = ?", [$this->name])->fetch()) {
+        if (MyDB::query("SELECT id FROM user WHERE name LIKE ?", [$this->name])->fetch_row()) {
             return false;
         }
 
         $x = rand(0, 500);
         $y = rand(0, 500);
         $max = 20;
-        while (!MyDB::getDB()->query("SELECT id FROM user WHERE x=? AND y=?", [$x, $y])->fetch() && $max > 0){
+        while (MyDB::query("SELECT id FROM user WHERE x=? AND y=?", [$x, $y])->fetch_row() && $max > 0){
             $x = rand(0, 500);
             $y = rand(0, 500);
             $max--;
@@ -148,7 +148,7 @@ class User
         }
 
         # create user
-        $res = MyDB::getDB()->query("INSERT INTO user (x, y, name, password, color, levelIndustry, levelEnergy, nbIndustry, nbEnergy, nbCannon, nbOffensiveTroop, nbLogisticTroop) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [$x, $y, $this->name, $this->password, $this->color, $this->levelIndustry, $this->levelEnergy, $this->nbIndustry, $this->nbEnergy, $this->nbCannon, $this->nbOffensiveTroop, $this->nbLogisticTroop]);
+        $res = MyDB::query("INSERT INTO user (x, y, name, password, color, levelIndustry, levelEnergy, nbIndustry, nbEnergy, nbCannon, nbOffensiveTroop, nbLogisticTroop) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [$x, $y, $this->name, $this->password, $this->color, 0, 0, 500, 0, 0, 0, 0]);
         if ($res) {
             $this->id = $res->fetch_assoc()['id'];
             return true;
@@ -333,5 +333,9 @@ UPDATE last_update SET last_update = NOW() WHERE 1;");
         $this->nbLogisticTroop = $user['nbLogisticTroop'];
         $this->x = $user['x'];
         $this->y = $user['y'];
+    }
+
+    function getScores(){
+        return $this->nbCannon*15 + $this->nbOffensiveTroop*10 + $this->nbLogisticTroop*10 + -200*(1-pow(2, $this->levelEnergy))+ -200*(1-pow(2, $this->levelIndustry));
     }
 }
