@@ -19,6 +19,35 @@ class User
     private $x;
     private $y;
 
+    public static function getUserById($id)
+    {
+        $user = new User();
+        if(!$user->loadFromId($id))
+            return null;
+        return $user;
+    }
+
+    public static function getAllUser()
+    {
+        $db = MyDB::getDB();
+        $result = $db->query("SELECT * FROM user");
+        $users = [];
+        while ($row = $result->fetch_assoc()) {
+            $user = new User();
+            $user->loadFromResult($row);
+            $users[] = $user;
+        }
+        return $users;
+    }
+
+    public static function isExist($id){
+        $db = MyDB::getDB();
+        $stmt = $db->prepare("SELECT id FROM user WHERE id = ?");
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        $stmt->store_result();
+        return $stmt->num_rows > 0;
+    }
 
 
     public function setColor($color)
@@ -92,6 +121,15 @@ class User
 
     public function create()
     {
+        # security check count user is less than 100
+        $result = MyDB::getDB()->query("SELECT COUNT(*) FROM user");
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            if ($row['COUNT(*)'] >= 100) {
+                return false;
+            }
+        }
+
         # test if user already exist
         if (MyDB::getDB()->query("SELECT id FROM user WHERE name = ?", [$this->name])->fetch()) {
             return false;
@@ -145,20 +183,7 @@ class User
     function loadFromId($id){
         $res = MyDB::getDB()->query("SELECT * FROM user WHERE id = ?", [$id]);
         if ($res) {
-            $user = $res->fetch_assoc();
-            $this->id = $user['id'];
-            $this->name = $user['name'];
-            $this->password = $user['password'];
-            $this->color = $user['color'];
-            $this->levelIndustry = $user['levelIndustry'];
-            $this->levelEnergy = $user['levelEnergy'];
-            $this->nbIndustry = $user['nbIndustry'];
-            $this->nbEnergy = $user['nbEnergy'];
-            $this->nbCannon = $user['nbCannon'];
-            $this->nbOffensiveTroop = $user['nbOffensiveTroop'];
-            $this->nbLogisticTroop = $user['nbLogisticTroop'];
-            $this->x = $user['x'];
-            $this->y = $user['y'];
+            $this->loadFromResult($res);
             return true;
         }
         return false;
@@ -262,5 +287,51 @@ UPDATE last_update SET last_update = NOW() WHERE 1;");
 
     public function getY(){
         return $this->y;
+    }
+
+    public function getId(){
+        return $this->id;
+    }
+
+    /**
+     * type: "cannon", "offensiveTroop", "logisticTroop"
+     * @return bool
+     */
+    public function purchase($type, $nb){
+        switch($type){
+            case "cannon":
+                return $this->cannonPurchase($nb);
+            case "offensiveTroop":
+                return $this->offensiveTroopPurchase($nb);
+            case "logisticTroop":
+                return $this->logisticTroopPurchase($nb);
+        }
+        return false;
+    }
+
+    public function attack($idDefender, $nbCannon, $nbOffensiveTroop, $nbLogisticTroop){
+        if (!User::isExist($idDefender)) {
+            return false;
+        }
+        $attackEvent = new AttackEvent();
+        return $attackEvent->create($this->id, $idDefender, $nbCannon, $nbOffensiveTroop, $nbLogisticTroop);
+    }
+
+    function loadFromResult($res)
+    {
+        $user = $res->fetch_assoc();
+        $this->id = $user['id'];
+        $this->name = $user['name'];
+        $this->password = $user['password'];
+        $this->color = $user['color'];
+        $this->levelIndustry = $user['levelIndustry'];
+        $this->levelEnergy = $user['levelEnergy'];
+        $this->nbIndustry = $user['nbIndustry'];
+        $this->nbEnergy = $user['nbEnergy'];
+        $this->nbCannon = $user['nbCannon'];
+        $this->nbOffensiveTroop = $user['nbOffensiveTroop'];
+        $this->nbLogisticTroop = $user['nbLogisticTroop'];
+        $this->x = $user['x'];
+        $this->y = $user['y'];
     }
 }

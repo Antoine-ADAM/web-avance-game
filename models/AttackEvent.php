@@ -24,7 +24,24 @@ class AttackEvent
     private $attackerX;
     private $attackerY;
 
-    function start($idAttacker, $idDefender, $nbCannon, $nbOffensiveTroop, $nbLogisticTroop)
+    public static function getAttackEventByUserId($getId)
+    {
+        $db = MyDB::getDB();
+        $sql = "SELECT * FROM attack_event WHERE idAttacker = ? OR idDefender = ?";
+        $stmt = $db->prepare($sql);
+        $stmt->bind_param("ii", $getId, $getId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $attackEvents = [];
+        while ($row = $result->fetch_assoc()) {
+            $attackEvent = new AttackEvent();
+            $attackEvent->loadFromResponseSql($row);
+            $attackEvents[] = $attackEvent;
+        }
+        return $attackEvents;
+    }
+
+    function create($idAttacker, $idDefender, $nbCannon, $nbOffensiveTroop, $nbLogisticTroop)
     {
         $this->idAttacker = $idAttacker;
         $this->idDefender = $idDefender;
@@ -50,31 +67,7 @@ class AttackEvent
         $res = MyDB::getDB()->query("INSERT INTO attack_event (idAttacker, idDefender, finalDateTime, startDateTime, nbCannon, nbOffensiveTroop, status, defenderX, defenderY, attackerX, attackerY) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [$this->idAttacker, $this->idDefender, $this->finalDateTime, $this->startDateTime, $this->nbCannon, $this->nbOffensiveTroop, $this->status, $this->defenderX, $this->defenderY, $this->attackerX, $this->attackerY]);
         return $res!=false;
     }
-    function createTable()
-    {
-        MyDB::getDB()->query("CREATE TABLE IF NOT EXISTS attack_event (
-            id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-            idAttacker INT(6) UNSIGNED NOT NULL,
-            idDefender INT(6) UNSIGNED NOT NULL,
-            finalDateTime DATETIME NOT NULL,
-            startDateTime DATETIME NOT NULL,
-            nbCannon INT(6) UNSIGNED NOT NULL,
-            nbOffensiveTroop INT(6) UNSIGNED NOT NULL,
-            nbLogisticTroop INT(6) UNSIGNED NOT NULL,
-            status INT(1) UNSIGNED NOT NULL,
-            nbCannonLossAttacker INT(6) UNSIGNED,
-            nbOffensiveTroopLossAttacker INT(6) UNSIGNED,
-            nbLogisticTroopLossAttacker INT(6) UNSIGNED,
-            nbIndustrySteal INT(6) UNSIGNED,
-            nbCannonLossDefender INT(6) UNSIGNED,
-            nbOffensiveTroopLossDefender INT(6) UNSIGNED,
-            nbLogisticTroopLossDefender INT(6) UNSIGNED,
-            defenderX INT(6) UNSIGNED NOT NULL,
-            defenderY INT(6) UNSIGNED NOT NULL,
-            attackerX INT(6) UNSIGNED NOT NULL,
-            attackerY INT(6) UNSIGNED NOT NULL
-        )");
-    }
+
     function loadFromResponseSql($response){
         $this->id = $response['id'];
         $this->idAttacker = $response['idAttacker'];
