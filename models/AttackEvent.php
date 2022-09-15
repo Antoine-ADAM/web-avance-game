@@ -109,10 +109,20 @@ class AttackEvent
         $pointDefense += $nbCannon*7;
         $pointDefense += $nbOffensiveTroop*5;
         $pointDefense += $nbLogisticTroop*5;
-        $ratio = $pointAttack/$pointDefense;
-        $nbCannon = round($nbCannon*(1-$ratio));
-        $nbOffensiveTroop = round($nbOffensiveTroop*(1-$ratio));
-        $nbLogisticTroop = round($nbLogisticTroop*(1-$ratio));
+        if($pointDefense==0){
+            $nbLogisticTroop = 0;
+            $nbOffensiveTroop = 0;
+            $nbCannon = 0;
+        }else{
+            $ratio = $pointAttack/$pointDefense;
+            $nbCannon = round($nbCannon*(1-$ratio));
+            $nbOffensiveTroop = round($nbOffensiveTroop*(1-$ratio));
+            $nbLogisticTroop = round($nbLogisticTroop*(1-$ratio));
+            if ($nbCannon<0) $nbCannon = 0;
+            if ($nbOffensiveTroop<0) $nbOffensiveTroop = 0;
+            if ($nbLogisticTroop<0) $nbLogisticTroop = 0;
+        }
+
     }
 
     function attack(){
@@ -263,9 +273,9 @@ class AttackEvent
 
     static function updateEvent(){
         $res = MyDB::getDB()->query("SELECT * FROM attack_event WHERE finalDateTime < NOW()");
-        while ($res && $res = $res->fetch_assoc()) {
+        while ($res && $sub = $res->fetch_assoc()) {
             $event = new AttackEvent();
-            $event->loadFromResponseSql($res);
+            $event->loadFromResponseSql($sub);
             $event->attack();
         }
     }
@@ -332,10 +342,10 @@ class AttackEvent
         $final = new DateTime($this->finalDateTime);
         $now = new DateTime();
         $diff = $now->diff($start);
-        $diff2 = $final->diff($start);
-        $percent = $diff->format('%r%a') / $diff2->format('%r%a');
-        $x = $this->attackerX + ($this->defenderX - $this->attackerX) * $percent;
-        $y = $this->attackerY + ($this->defenderY - $this->attackerY) * $percent;
+        $diff2 = $final->diff($start)->format('%r%s');
+        $percent = $diff->format('%r%s') / ($diff2);
+        $x = round($this->attackerX + ($this->defenderX - $this->attackerX) * $percent);
+        $y = round($this->attackerY + ($this->defenderY - $this->attackerY) * $percent);
         return [$x, $y];
     }
 }
