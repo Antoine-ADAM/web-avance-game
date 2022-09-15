@@ -117,7 +117,8 @@ class User
 
     public function save(){
         # update levelIndustry, levelEnergy, nbIndustry, nbEnergy, nbCannon, nbOffensiveTroop, nbLogisticTroop
-        return true == MyDB::getDB()->query("UPDATE user SET levelIndustry = ?, levelEnergy = ?, nbIndustry = ?, nbEnergy = ?, nbCannon = ?, nbOffensiveTroop = ?, nbLogisticTroop = ? WHERE id = ?", [$this->levelIndustry, $this->levelEnergy, $this->nbIndustry, $this->nbEnergy, $this->nbCannon, $this->nbOffensiveTroop, $this->nbLogisticTroop, $this->id]);
+        MyDB::query("UPDATE user SET levelIndustry = ?, levelEnergy = ?, nbIndustry = ?, nbEnergy = ?, nbCannon = ?, nbOffensiveTroop = ?, nbLogisticTroop = ? WHERE id = ?", [$this->levelIndustry, $this->levelEnergy, $this->nbIndustry, $this->nbEnergy, $this->nbCannon, $this->nbOffensiveTroop, $this->nbLogisticTroop, $this->id]);
+        return true;
     }
 
     public function create()

@@ -58,7 +58,8 @@ function purchase(){
     $user = $_SESSION["user"];
     $type = $_POST['type'];
     $nb = $_POST['nb'];
-    if(isset($type) && isset($nb) && is_numeric($nb) && $user->purchase($type, intval($nb)) && $user->update()){
+    var_dump($type, $nb);
+    if(isset($type) && isset($nb) && is_numeric($nb) && $user->purchase($type, intval($nb)) && $user->save()){
         Pages::returnJSON(["success" => "purchase done"]);
     }
     Pages::returnJSON(["error" => "purchase failed"]);
@@ -68,7 +69,7 @@ function levelUp(){
         Pages::returnJSON(["error" => "not logged"]);
     $user = $_SESSION["user"];
     $type = $_POST['type'];
-    if(isset($type) && $user->levelUp($type) && $user->update()){
+    if(isset($type) && $user->levelUp($type) && $user->save()){
         Pages::returnJSON(["success" => "level up done"]);
     }
     Pages::returnJSON(["error" => "level up failed"]);
@@ -83,8 +84,8 @@ function attack(){
     $nbOffensiveTroop = $_POST['nbOffensiveTroop'];
     $nbLogisticTroop = $_POST['nbLogisticTroop'];
     if(isset($idDefender) && isset($nbCannon) && isset($nbOffensiveTroop) && isset($nbLogisticTroop) &&
-        is_int($idDefender) && is_int($nbCannon) && is_int($nbOffensiveTroop) && is_int($nbLogisticTroop) &&
-        $user->attack($idDefender, $nbCannon, $nbOffensiveTroop, $nbLogisticTroop)){
+        is_numeric($idDefender) && is_numeric($nbCannon) && is_numeric($nbOffensiveTroop) && is_numeric($nbLogisticTroop) &&
+        $user->attack(intval($idDefender), intval($nbCannon), intval($nbOffensiveTroop), intval($nbLogisticTroop))){
         Pages::returnJSON(["success" => "attack done"]);
     }
     Pages::returnJSON(["error" => "attack failed"]);
