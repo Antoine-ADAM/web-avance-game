@@ -166,9 +166,9 @@ class AttackEvent
                 $userDefender->save();
                 $userAttacker = new User();
                 $userAttacker->loadFromId($this->idAttacker);
-                $userAttacker->setNbCannon($userAttacker->getNbCannon() + $this->nbCannonLossAttacker);
-                $userAttacker->setNbOffensiveTroop($userAttacker->getNbOffensiveTroop() + $this->nbOffensiveTroopLossAttacker);
-                $userAttacker->setNbLogisticTroop($userAttacker->getNbLogisticTroop() + $this->nbLogisticTroopLossAttacker);
+                $userAttacker->setNbCannon($userAttacker->getNbCannon() + $nbCannonAttacker);
+                $userAttacker->setNbOffensiveTroop($userAttacker->getNbOffensiveTroop() + $nbOffensiveTroopAttacker);
+                $userAttacker->setNbLogisticTroop($userAttacker->getNbLogisticTroop() + $nbLogisticTroopAttacker);
                 $userAttacker->setNbIndustry($userAttacker->getNbIndustry() + $this->nbIndustrySteal);
                 $userAttacker->save();
             }elseif ($nbCannonAttacker <= 0 && $nbOffensiveTroopAttacker <= 0) {
@@ -199,9 +199,9 @@ class AttackEvent
                 $userDefender->save();
                 $userAttacker = new User();
                 $userAttacker->loadFromId($this->idAttacker);
-                $userAttacker->setNbCannon($userAttacker->getNbCannon() + $this->nbCannonLossAttacker);
-                $userAttacker->setNbOffensiveTroop($userAttacker->getNbOffensiveTroop() + $this->nbOffensiveTroopLossAttacker);
-                $userAttacker->setNbLogisticTroop($userAttacker->getNbLogisticTroop() + $this->nbLogisticTroopLossAttacker);
+                $userAttacker->setNbCannon($userAttacker->getNbCannon() + $nbCannonAttacker);
+                $userAttacker->setNbOffensiveTroop($userAttacker->getNbOffensiveTroop() + $nbOffensiveTroopAttacker);
+                $userAttacker->setNbLogisticTroop($userAttacker->getNbLogisticTroop() + $nbLogisticTroopAttacker);
                 $userAttacker->save();
             }
 
@@ -299,18 +299,20 @@ class AttackEvent
 
     function getFinalDateTime()
     {
-        return (new DateTime($this->finalDateTime))->setTimezone(new DateTimeZone('Europe/Paris'));
+        #return (new DateTime($this->finalDateTime))->setTimezone(new DateTimeZone('Europe/Paris'));
+        return $this->finalDateTime;
     }
     function getStartDateTime()
     {
-        return (new DateTime($this->startDateTime))->setTimezone(new DateTimeZone('Europe/Paris'));
+        #return (new DateTime($this->startDateTime))->setTimezone(new DateTimeZone('Europe/Paris'));
+        return $this->startDateTime;
     }
     function getId()
     {
         return $this->id;
     }
     /**
-     * @return mixed
+     * @return int
      */
     public function getDefenderX()
     {
@@ -318,7 +320,7 @@ class AttackEvent
     }
 
     /**
-     * @return mixed
+     * @return int
      */
     public function getDefenderY()
     {
@@ -326,7 +328,7 @@ class AttackEvent
     }
 
     /**
-     * @return mixed
+     * @return int
      */
     public function getAttackerX()
     {
@@ -334,7 +336,7 @@ class AttackEvent
     }
 
     /**
-     * @return mixed
+     * @return int
      */
     public function getAttackerY()
     {
