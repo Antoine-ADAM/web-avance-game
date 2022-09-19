@@ -204,6 +204,7 @@ class AttackEvent
             }
 
         }
+        $this->save();
     }
 
     public function getNbCannonLossAttacker()
@@ -351,5 +352,11 @@ class AttackEvent
         $x = round($this->attackerX + ($this->defenderX - $this->attackerX) * $percent);
         $y = round($this->attackerY + ($this->defenderY - $this->attackerY) * $percent);
         return [$x, $y];
+    }
+
+    private function save()
+    {
+        $res = MyDB::query("UPDATE attack_event SET status = ?, nbCannon = ?, nbOffensiveTroop = ?, nbLogisticTroop = ?, nbIndustrySteal = ?, nbCannonLossAttacker = ?, nbOffensiveTroopLossAttacker = ?, nbLogisticTroopLossAttacker = ?, nbCannonLossDefender = ?, nbOffensiveTroopLossDefender = ?, nbLogisticTroopLossDefender = ? WHERE id = ?", [$this->status, $this->nbCannon, $this->nbOffensiveTroop, $this->nbLogisticTroop, $this->nbIndustrySteal, $this->nbCannonLossAttacker, $this->nbOffensiveTroopLossAttacker, $this->nbLogisticTroopLossAttacker, $this->nbCannonLossDefender, $this->nbOffensiveTroopLossDefender, $this->nbLogisticTroopLossDefender, $this->id]);
+        return true;
     }
 }
