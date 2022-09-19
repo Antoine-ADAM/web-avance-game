@@ -278,7 +278,7 @@ class AttackEvent
     }
 
     static function updateEvent(){
-        $res = MyDB::getDB()->query("SELECT * FROM attack_event WHERE status = 0 AND finalDateTime < NOW()");
+        $res = MyDB::getDB()->query("SELECT * FROM attack_event WHERE status = 0 AND finalDateTime < CONVERT_TZ(NOW(), @@session.time_zone, '+00:00')");
         while ($res && $sub = $res->fetch_assoc()) {
             $event = new AttackEvent();
             $event->loadFromResponseSql($sub);
@@ -299,13 +299,11 @@ class AttackEvent
 
     function getFinalDateTime()
     {
-        #return (new DateTime($this->finalDateTime))->setTimezone(new DateTimeZone('Europe/Paris'));
-        return $this->finalDateTime;
+        return (new DateTime($this->finalDateTime))->setTimezone(new DateTimeZone('Europe/Paris'));
     }
     function getStartDateTime()
     {
-        #return (new DateTime($this->startDateTime))->setTimezone(new DateTimeZone('Europe/Paris'));
-        return $this->startDateTime;
+        return (new DateTime($this->startDateTime))->setTimezone(new DateTimeZone('Europe/Paris'));
     }
     function getId()
     {
