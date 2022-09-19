@@ -5,6 +5,7 @@ require_once 'models/AttackEvent.php';
 
 
 function init(){
+    date_default_timezone_set('Europe/Paris');
     session_start();
     if (isset($_SESSION["id"])){
         $user = User::getUserById($_SESSION["id"]);
@@ -96,7 +97,7 @@ function attack(){
     $nbOffensiveTroop = $json["nbOffensiveTroop"];
     $nbLogisticTroop = $json["nbLogisticTroop"];
     if(is_numeric($idDefender) && is_numeric($nbCannon) && is_numeric($nbOffensiveTroop) && is_numeric($nbLogisticTroop) &&
-        $user->attack(intval($idDefender), intval($nbCannon), intval($nbOffensiveTroop), intval($nbLogisticTroop))){
+        $user->attack(intval($idDefender), intval($nbCannon), intval($nbOffensiveTroop), intval($nbLogisticTroop)) && $user->save()){
         Pages::returnJSON(["success" => "attack done"]);
     }
     Pages::returnJSON(["error" => "attack failed"]);

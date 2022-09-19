@@ -338,12 +338,17 @@ UPDATE last_update SET last_update = NOW() WHERE 1;");
     }
 
     public function attack($idDefender, $nbCannon, $nbOffensiveTroop, $nbLogisticTroop){
-        var_dump($idDefender, $nbCannon, $nbOffensiveTroop, $nbLogisticTroop);
-        if (!User::isExist($idDefender)) {
+        if (!User::isExist($idDefender) or $idDefender == $this->id or $nbCannon < 0 or $nbOffensiveTroop < 0 or $nbLogisticTroop < 0 or $nbCannon > $this->nbCannon or $nbOffensiveTroop > $this->nbOffensiveTroop or $nbLogisticTroop > $this->nbLogisticTroop) {
             return false;
         }
         $attackEvent = new AttackEvent();
-        return $attackEvent->create($this->id, $idDefender, $nbCannon, $nbOffensiveTroop, $nbLogisticTroop);
+        if($attackEvent->create($this->id, $idDefender, $nbCannon, $nbOffensiveTroop, $nbLogisticTroop)){
+            $this->nbCannon -= $nbCannon;
+            $this->nbOffensiveTroop -= $nbOffensiveTroop;
+            $this->nbLogisticTroop -= $nbLogisticTroop;
+            return true;
+        }
+        return false;
     }
 
     function loadFromResult($user)
