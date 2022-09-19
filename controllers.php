@@ -5,7 +5,7 @@ require_once 'models/AttackEvent.php';
 
 
 function init(){
-    date_default_timezone_set('Europe/Paris');
+    //date_default_timezone_set('Europe/Paris'); comment for compare with db
     session_start();
     if (isset($_SESSION["id"])){
         $user = User::getUserById($_SESSION["id"]);

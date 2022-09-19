@@ -160,8 +160,8 @@
         echo "<td>" . $attackEvent->getId() . "</td>";
         echo "<td>" . $attackEvent->getIdAttacker() . "</td>";
         echo "<td>" . $attackEvent->getIdDefender() . "</td>";
-        echo "<td>" . $attackEvent->getFinalDateTime() . "</td>";
-        echo "<td>" . $attackEvent->getStartDateTime() . "</td>";
+        echo "<td>" . $attackEvent->getFinalDateTime()->format("Y-m-d H:i:s") . "</td>";
+        echo "<td>" . $attackEvent->getStartDateTime()->format("Y-m-d H:i:s") . "</td>";
         echo "<td>" . $attackEvent->getNbCannon() . "</td>";
         echo "<td>" . $attackEvent->getNbOffensiveTroop() . "</td>";
         echo "<td>" . $attackEvent->getNbLogisticTroop() . "</td>";
