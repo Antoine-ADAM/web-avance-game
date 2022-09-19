@@ -5,7 +5,7 @@
     <title>game</title>
 </head>
 <body>
-<form action="<?= Pages::toURL(Pages::PURCHASE) ?>" method="post">
+<div>
     <select name="type" id="fdsgfds">
         <?php
             foreach (User::PURCHASES as $type){
@@ -14,33 +14,86 @@
         ?>
     </select>
     <input type="number" name="nb" id="hgfdhgfd">
-    <input type="submit" value="submit">
-</form>
+    <button onclick="purchase()">Purchase</button>
+</div>
 <hr>
-<form action="<?= Pages::toURL(Pages::LEVEL_UP) ?>" method="post">
-    <select name="type" id="fdsgfds">
+<div>
+    <select name="type" id="gfdsgfdsgf">
         <?php
         foreach (User::UPGRADES as $type){
             echo '<option value="'.$type.'">'.$type."</option>";
         }
         ?>
     </select>
-    <input type="submit" value="submit">
-</form>
+    <button onclick="levelUp()">Level Up USE FETCH</button>
+</div>
+
 <hr>
-<form action="<?= Pages::toURL(Pages::ATTACK) ?>" method="post">
-    <select name="idDefender">
+<div>
+    <select name="idDefender" id="bgfdshdsvt">
         <?php
         foreach ($users as $user){
             echo "<option value=\"".$user->getId()."\">".$user->getName()."</option>";
         }
         ?>
     </select>
-    <input type="number" name="nbCannon" placeholder="nbCannon">
-    <input type="number" name="nbOffensiveTroop" placeholder="nbOffensiveTroop">
-    <input type="number" name="nbLogisticTroop" placeholder="nbLogisticTroop">
-    <input type="submit" value="Attack">
-</form>
+    <input type="number" name="nbCannon" placeholder="nbCannon" id="aa1">
+    <input type="number" name="nbOffensiveTroop" placeholder="nbOffensiveTroop" id="aa2">
+    <input type="number" name="nbLogisticTroop" placeholder="nbLogisticTroop" id="aa3">
+    <button onclick="attack()">Attack</button>
+</div>
+<script type="application/javascript">
+    function levelUp(){
+        fetch("<?= Pages::toURL(Pages::LEVEL_UP) ?>", {
+            method: 'POST',
+            body: JSON.stringify({type: document.getElementById("gfdsgfdsgf").value}),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then(function(response) {
+            console.log(response);
+            return response.json();
+        }).then(function(data) {
+            alert(data);
+            console.log(data);
+        });
+    }
+    function purchase() {
+        fetch("<?= Pages::toURL(Pages::PURCHASE) ?>", {
+            method: 'POST',
+            body: JSON.stringify({type: document.getElementById("fdsgfds").value, nb: document.getElementById("hgfdhgfd").value}),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then(function(response) {
+            console.log(response);
+            return response.json();
+        }).then(function(data) {
+            alert(data);
+            console.log(data);
+        });
+    }
+    function attack() {
+        fetch("<?= Pages::toURL(Pages::ATTACK) ?>", {
+            method: 'POST',
+            body: JSON.stringify({
+                idDefender: document.getElementById("bgfdshdsvt").value,
+                nbCannon: document.getElementById("aa1").value,
+                nbOffensiveTroop: document.getElementById("aa2").value,
+                nbLogisticTroop: document.getElementById("aa3").value
+            }),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then(function(response) {
+            console.log(response);
+            return response.json();
+        }).then(function(data) {
+            alert(data);
+            console.log(data);
+        });
+    }
+</script>
 <hr>
 <a href="<?= Pages::toURL(Pages::LOGOUT) ?>">Logout</a>
 <hr>
@@ -59,6 +112,7 @@
         <th>scores</th>
         <th>x</th>
         <th>y</th>
+        <th>getCostLevelUpIndustry</th>
     </tr>
     <?php foreach ($users as $user): ?>
         <tr>
@@ -75,6 +129,7 @@
             <td><?= $user->getScores() ?></td>
             <td><?= $user->getX() ?></td>
             <td><?= $user->getY() ?></td>
+            <td><?= $user->getCostLevelUpIndustry()[0] ?>I/<?= $user->getCostLevelUpIndustry()[1] ?>E</td>
         </tr>
     <?php endforeach; ?>
 </table>

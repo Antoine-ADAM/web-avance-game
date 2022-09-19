@@ -16,8 +16,5 @@
         <input type="color" name="color" placeholder="color">
         <input type="submit" value="Register">
     </form>
-    <?php
-    var_dump($_SESSION);
-    ?>
 </body>
 </html>

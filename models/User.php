@@ -338,6 +338,7 @@ UPDATE last_update SET last_update = NOW() WHERE 1;");
     }
 
     public function attack($idDefender, $nbCannon, $nbOffensiveTroop, $nbLogisticTroop){
+        var_dump($idDefender, $nbCannon, $nbOffensiveTroop, $nbLogisticTroop);
         if (!User::isExist($idDefender)) {
             return false;
         }
