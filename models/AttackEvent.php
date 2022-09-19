@@ -179,6 +179,7 @@ class AttackEvent
                 $this->nbCannonLossAttacker = $this->nbCannon;
                 $this->nbOffensiveTroopLossAttacker = $this->nbOffensiveTroop;
                 $this->nbLogisticTroopLossAttacker = $this->nbLogisticTroop;
+                $this->nbIndustrySteal = 0;
                 $userDefender->setNbCannon($nbCannonDefender);
                 $userDefender->setNbOffensiveTroop($nbOffensiveTroopDefender);
                 $userDefender->setNbLogisticTroop($nbLogisticTroopDefender);
@@ -191,6 +192,7 @@ class AttackEvent
                 $this->nbCannonLossAttacker = $this->nbCannon - $nbCannonAttacker;
                 $this->nbOffensiveTroopLossAttacker = $this->nbOffensiveTroop - $nbOffensiveTroopAttacker;
                 $this->nbLogisticTroopLossAttacker = $this->nbLogisticTroop - $nbLogisticTroopAttacker;
+                $this->nbIndustrySteal = 0;
                 $userDefender->setNbCannon($nbCannonDefender);
                 $userDefender->setNbOffensiveTroop($nbOffensiveTroopDefender);
                 $userDefender->setNbLogisticTroop($nbLogisticTroopDefender);
@@ -276,8 +278,7 @@ class AttackEvent
     }
 
     static function updateEvent(){
-        $res = MyDB::getDB()->query("SELECT * FROM attack_event WHERE finalDateTime < NOW()");
-        var_dump($res);
+        $res = MyDB::getDB()->query("SELECT * FROM attack_event WHERE status = 0 AND finalDateTime < NOW()");
         while ($res && $sub = $res->fetch_assoc()) {
             $event = new AttackEvent();
             $event->loadFromResponseSql($sub);
