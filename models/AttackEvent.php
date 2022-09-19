@@ -344,14 +344,13 @@ class AttackEvent
     public function actualPosition(){
         if($this->status != 0)
             return false;
-        $start = new DateTime($this->startDateTime);
-        $final = new DateTime($this->finalDateTime);
-        $now = new DateTime();
-        $diff = $now->diff($start);
-        $diff2 = $final->diff($start)->format('%r%s');
-        $percent = $diff->format('%r%s') / ($diff2);
-        $x = round($this->attackerX + ($this->defenderX - $this->attackerX) * $percent);
-        $y = round($this->attackerY + ($this->defenderY - $this->attackerY) * $percent);
+        $start = (new DateTime($this->startDateTime))->getTimestamp();
+        $final = (new DateTime($this->finalDateTime))->getTimestamp();
+        $actual = (new DateTime())->getTimestamp() - $start;
+        $total = $final - $start;
+        $ratio = $actual / $total;
+        $x = $this->attackerX + ($this->defenderX - $this->attackerX) * $ratio;
+        $y = $this->attackerY + ($this->defenderY - $this->attackerY) * $ratio;
         return [$x, $y];
     }
 
