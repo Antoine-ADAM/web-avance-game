@@ -5,7 +5,7 @@
     <title>game</title>
 </head>
 <body>
-<div>
+<form action="<?= Pages::toURL(Pages::PURCHASE) ?>" method="post">
     <select name="type" id="fdsgfds">
         <?php
             foreach (User::PURCHASES as $type){
@@ -14,10 +14,11 @@
         ?>
     </select>
     <input type="number" name="nb" id="hgfdhgfd">
-    <button onclick="purchase()">Purchase</button>
-</div>
+    <!--<button onclick="purchase()">Purchase</button>-->
+    <input type="submit" value="Purchase">
+</form>
 <hr>
-<div>
+<form action="<?= Pages::toURL(Pages::LEVEL_UP) ?>" method="post">
     <select name="type" id="gfdsgfdsgf">
         <?php
         foreach (User::UPGRADES as $type){
@@ -25,11 +26,11 @@
         }
         ?>
     </select>
-    <button onclick="levelUp()">Level Up USE FETCH</button>
-</div>
+    <input type="submit" value="Level Up">
+</form>
 
 <hr>
-<div>
+<form action="<?= Pages::toURL(Pages::ATTACK) ?>" method="post">
     <select name="idDefender" id="bgfdshdsvt">
         <?php
         foreach ($users as $user){
@@ -40,8 +41,8 @@
     <input type="number" name="nbCannon" placeholder="nbCannon" id="aa1">
     <input type="number" name="nbOffensiveTroop" placeholder="nbOffensiveTroop" id="aa2">
     <input type="number" name="nbLogisticTroop" placeholder="nbLogisticTroop" id="aa3">
-    <button onclick="attack()">Attack</button>
-</div>
+    <input type="submit" value="Attack">
+</form>
 <script type="application/javascript">
     function levelUp(){
         fetch("<?= Pages::toURL(Pages::LEVEL_UP) ?>", {

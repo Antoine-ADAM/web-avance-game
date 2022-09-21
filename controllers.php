@@ -65,42 +65,45 @@ function logout(){
 
 function purchase(){
     if(!isLogged())
-        Pages::returnJSON(["error" => "not logged"]);
+        Pages::redirect(Pages::HOME);
+    if(!isset($_POST['type']) || !isset($_POST['nb']))
+        Pages::redirect(Pages::GAME);
     $user = $_SESSION["user"];
-    $json = getJsonRequest(["type", "nb"]);
-    $type = $json["type"];
-    $nb = $json["nb"];
+    $type = $_POST["type"];
+    $nb = $_POST["nb"];
     if(is_numeric($nb) && $user->purchase($type, intval($nb)) && $user->save()){
-        Pages::returnJSON(["success" => "purchase done"]);
+        Pages::redirect(Pages::GAME);
     }
-    Pages::returnJSON(["error" => "purchase failed"]);
+    Pages::redirect(Pages::GAME);
 }
 function levelUp(){
     if(!isLogged())
-        Pages::returnJSON(["error" => "not logged"]);
+        Pages::redirect(Pages::HOME);
+    if(!isset($_POST['type']))
+        Pages::redirect(Pages::GAME);
     $user = $_SESSION["user"];
-    $json = getJsonRequest(["type"]);
-    $type = $json["type"];
+    $type = $_POST["type"];
     if($user->levelUp($type) && $user->save()){
-        Pages::returnJSON(["success" => "level up done"]);
+        Pages::redirect(Pages::GAME);
     }
-    Pages::returnJSON(["error" => "level up failed"]);
+    Pages::redirect(Pages::GAME);
 }
 
 function attack(){
     if(!isLogged())
-        Pages::returnJSON(["error" => "not logged"]);
+        Pages::redirect(Pages::HOME);
     $user = $_SESSION["user"];
-    $json = getJsonRequest(["idDefender", "nbCannon", "nbOffensiveTroop", "nbLogisticTroop"]);
-    $idDefender = $json["idDefender"];
-    $nbCannon = $json["nbCannon"];
-    $nbOffensiveTroop = $json["nbOffensiveTroop"];
-    $nbLogisticTroop = $json["nbLogisticTroop"];
+    if(!isset($_POST['idDefender']) || !isset($_POST['nbCannon']) || !isset($_POST['nbOffensiveTroop']) || !isset($_POST['nbLogisticTroop']))
+        Pages::redirect(Pages::GAME);
+    $idDefender = $_POST["idDefender"];
+    $nbCannon = $_POST["nbCannon"];
+    $nbOffensiveTroop = $_POST["nbOffensiveTroop"];
+    $nbLogisticTroop = $_POST["nbLogisticTroop"];
     if(is_numeric($idDefender) && is_numeric($nbCannon) && is_numeric($nbOffensiveTroop) && is_numeric($nbLogisticTroop) &&
         $user->attack(intval($idDefender), intval($nbCannon), intval($nbOffensiveTroop), intval($nbLogisticTroop)) && $user->save()){
-        Pages::returnJSON(["success" => "attack done"]);
+        Pages::redirect(Pages::GAME);
     }
-    Pages::returnJSON(["error" => "attack failed"]);
+    Pages::redirect(Pages::GAME);
 }
 
 
