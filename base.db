@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS attack_event (
                                             finalDateTime DATETIME NOT NULL,
                                             startDateTime DATETIME NOT NULL,
                                             nbCannon BIGINT UNSIGNED NOT NULL,
-                                            nbOffensiveTroop BIGINT UNSIGNED UNSIGNED NOT NULL,
+                                            nbOffensiveTroop BIGINT UNSIGNED NOT NULL,
                                             nbLogisticTroop BIGINT UNSIGNED NOT NULL,
                                             status INT(1) UNSIGNED NOT NULL,
                                             nbCannonLossAttacker BIGINT UNSIGNED,
