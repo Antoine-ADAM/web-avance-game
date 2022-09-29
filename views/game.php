@@ -5,6 +5,7 @@
     <title>game</title>
 </head>
 <body>
+<?php Alert::displayAlerts() ?>
 <form action="<?= Pages::toURL(Pages::PURCHASE) ?>" method="post">
     <select name="type" id="fdsgfds">
         <?php

@@ -3,6 +3,7 @@
     <title>Home</title>
 </head>
 <body>
+<?php Alert::displayAlerts() ?>
     <h1>Home</h1>
     <p>Home page content</p>
     <h3 style="color: red">Ne pas oublier de préciser qu'on a une surcouche de MYSQLI pour la fonction query (S'il ne regarde pas en détail, il va nous enlever des points pour la sécu)</h3>
