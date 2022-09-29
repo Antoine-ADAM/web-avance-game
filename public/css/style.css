@@ -1,0 +1,55 @@
+body{
+  background-color: gray;
+}
+#info{
+   z-index: 1;
+   border: 1px solid black;
+   width: 1500px;
+   height: 100px;
+   position: fixed;
+   left: calc((100% - 1500px) / 2);
+   top: 65px;
+   background-color: white;
+}
+#screen-left{
+  position: absolute;
+  top: 165px;
+  left: calc((100% - 1900px) / 2);
+  position: fixed;
+  background-color: white;
+  border: 1px solid blue;
+  width: 200px;
+  /*height: 500px;*/
+}
+#screen{
+  position: absolute;
+  top: 165px;
+  left: calc((100% - 1500px) / 2);
+  background-color: white;
+  border: 5px solid black;
+  width: 1500px;
+  height: 1500px;
+}
+#screen-right{
+  position: absolute;
+  top: 165px;
+  right: calc((100% - 1900px) / 2);
+  position: fixed;
+  background-color: white;
+  border: 1px solid green;
+  width: 200px;
+  /*height: 500px;*/
+}
+.player_dot{
+  position: absolute;
+  border-radius: 1px;
+  box-shadow:
+    0px 0px 10px black,
+    0px 0px 10px black,
+    0px 0px 10px black,
+    0px 0px 10px black,
+    0px 0px 10px black
+  ;
+  width: 3px;
+  height: 3px;
+}

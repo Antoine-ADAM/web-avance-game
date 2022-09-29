@@ -3,102 +3,144 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
     <title>game</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="/public/css/style.css">
 </head>
 <body>
-<form action="<?= Pages::toURL(Pages::PURCHASE) ?>" method="post">
-    <select name="type" id="fdsgfds">
-        <?php
-            foreach (User::PURCHASES as $type){
-                echo '<option value="'.$type.'">'.$type."</option>";
-            }
-        ?>
-    </select>
-    <input type="number" name="nb" id="hgfdhgfd">
-    <!--<button onclick="purchase()">Purchase</button>-->
-    <input type="submit" value="Purchase">
-</form>
-<hr>
-<form action="<?= Pages::toURL(Pages::LEVEL_UP) ?>" method="post">
-    <select name="type" id="gfdsgfdsgf">
-        <?php
-        foreach (User::UPGRADES as $type){
-            echo '<option value="'.$type.'">'.$type."</option>";
-        }
-        ?>
-    </select>
-    <input type="submit" value="Level Up">
-</form>
 
-<hr>
-<form action="<?= Pages::toURL(Pages::ATTACK) ?>" method="post">
-    <select name="idDefender" id="bgfdshdsvt">
+<nav class="navbar navbar-dark bg-dark">
+  <div class="container-fluid">
+    <span class="navbar-text">
+      <?= $user->getName(); ?>
+    </span>
+    <div class="text-light mx-auto h2">Game</div>
+    <span class="navbar-text">
+      <a href="<?= Pages::toURL(Pages::LOGOUT) ?>">Logout</a>
+    </span>
+  </div>
+</nav>
+
+<div id="info">
+    <div class="container row">
+        <ul class="col-3">
+            <li>Industry level: <?= $user->getLevelIndustry() ?></li>
+            <li>Energy level: <?= $user->getLevelEnergy() ?></li>
+        </ul>
+        <ul class="col-3">
+            <li>Canoon amount: <?= $user->getNbCannon() ?></li>
+            <li>Offensive troop amount: <?= $user->getNbOffensiveTroop() ?></li>
+            <li>Logistic troop amount: <?= $user->getNbLogisticTroop() ?></li>
+        </ul>
+        <ul class="col-3">
+            <li>Industry amount: <?= $user->getNbIndustry() ?></li>
+            <li>Energy amount: <?= $user->getNbEnergy() ?></li>
+        </ul>
+    </div>
+</div>
+
+<div id="screen-left" class="container p-3">
+    <u><b>Shop</b></u>
+    <form action="<?= Pages::toURL(Pages::PURCHASE) ?>" method="post">
+        <label>15I/2E</label>
+        <input type="hidden" name="type" value="cannon">
+        <input type="number" name="nb" value="0" class="form-control">
+        <input type="submit" value="Buy cannon" class="btn btn-outline-secondary">
+    </form>
+    <form action="<?= Pages::toURL(Pages::PURCHASE) ?>" method="post">
+        <label>10I/0E</label>
+        <input type="hidden" name="type" value="offensiveTroop">
+        <input type="number" name="nb" value="0" class="form-control">
+        <input type="submit" value="Buy offensive troop" class="btn btn-outline-secondary">
+    </form>
+    <form action="<?= Pages::toURL(Pages::PURCHASE) ?>" method="post">
+        <label>10I/0E</label>
+        <input type="hidden" name="type" value="logisticTroop">
+        <input type="number" name="nb" value="0" class="form-control">
+        <input type="submit" value="Buy logistic troop" class="btn btn-outline-secondary">
+    </form>
+    <hr>
+    <u><b>Level Up</b></u>
+    
+    <label>
         <?php
-        foreach ($users as $user){
-            echo "<option value=\"".$user->getId()."\">".$user->getName()."</option>";
-        }
+            if(!is_null($user->getCostLevelUpIndustry())){
+                echo $user->getCostLevelUpIndustry()[0] ?>I/<?php  echo $user->getCostLevelUpIndustry()[1] 
+                ?>E
+                <form action="<?= Pages::toURL(Pages::LEVEL_UP) ?>" method="post">
+                    <input type="hidden" name="type" value="industry">
+                    <input type="submit" value="Upgrade industry" class="btn btn-outline-secondary">
+                </form>
+                <?php
+            }else{
+                echo "Max level reached !";
+            }
         ?>
-    </select>
-    <input type="number" name="nbCannon" placeholder="nbCannon" id="aa1">
-    <input type="number" name="nbOffensiveTroop" placeholder="nbOffensiveTroop" id="aa2">
-    <input type="number" name="nbLogisticTroop" placeholder="nbLogisticTroop" id="aa3">
-    <input type="submit" value="Attack">
-</form>
-<script type="application/javascript">
-    function levelUp(){
-        fetch("<?= Pages::toURL(Pages::LEVEL_UP) ?>", {
-            method: 'POST',
-            body: JSON.stringify({type: document.getElementById("gfdsgfdsgf").value}),
-            headers: {
-                'Content-Type': 'application/json'
+    </label>
+
+
+    <label>
+        <?php
+            if(!is_null($user->getCostLevelUpEnergy())){
+                echo $user->getCostLevelUpEnergy()[0] ?>I/<?php  echo $user->getCostLevelUpEnergy()[1] 
+                ?>E
+                <form action="<?= Pages::toURL(Pages::LEVEL_UP) ?>" method="post">
+                    <input type="hidden" name="type" value="energy">
+                    <input type="submit" value="Upgrade energy" class="btn btn-outline-secondary">
+                </form>
+                <?php
+            }else{
+                echo "Max level reached !";
             }
-        }).then(function(response) {
-            console.log(response);
-            return response.json();
-        }).then(function(data) {
-            alert(data);
-            console.log(data);
-        });
-    }
-    function purchase() {
-        fetch("<?= Pages::toURL(Pages::PURCHASE) ?>", {
-            method: 'POST',
-            body: JSON.stringify({type: document.getElementById("fdsgfds").value, nb: document.getElementById("hgfdhgfd").value}),
-            headers: {
-                'Content-Type': 'application/json'
+        ?>
+    </label>
+    
+</div>
+
+
+<div id="screen">
+  <?php foreach ($users as $user): ?>
+    <div
+       class="player_dot"
+       style="top: <?=$user->getY() * 3; ?>px; left: <?=$user->getY() * 3; ?>px; background-color: <?=$user->getColor(); ?>;">
+    </div>
+  <?php endforeach; ?>
+</div>
+
+<div id="screen-right" class="container p-3">
+
+    <u><b>Ongoing attack</b></u><br>
+    None
+    <hr>
+    <u><b>Current defense</b></u><br>
+    None<br>
+    <hr>
+    <u><b>Send troops</b></u><br>
+    <form action="<?= Pages::toURL(Pages::ATTACK) ?>" method="post">
+        <select name="idDefender" id="bgfdshdsvt">
+            <?php
+            foreach ($users as $user){
+                echo "<option value=\"".$user->getId()."\">".$user->getName()."</option>";
             }
-        }).then(function(response) {
-            console.log(response);
-            return response.json();
-        }).then(function(data) {
-            alert(data);
-            console.log(data);
-        });
-    }
-    function attack() {
-        fetch("<?= Pages::toURL(Pages::ATTACK) ?>", {
-            method: 'POST',
-            body: JSON.stringify({
-                idDefender: document.getElementById("bgfdshdsvt").value,
-                nbCannon: document.getElementById("aa1").value,
-                nbOffensiveTroop: document.getElementById("aa2").value,
-                nbLogisticTroop: document.getElementById("aa3").value
-            }),
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        }).then(function(response) {
-            console.log(response);
-            return response.json();
-        }).then(function(data) {
-            alert(data);
-            console.log(data);
-        });
-    }
-</script>
-<hr>
-<a href="<?= Pages::toURL(Pages::LOGOUT) ?>">Logout</a>
-<hr>
-<table>
+            ?>
+        </select>
+        <input type="number" name="nbCannon" placeholder="Cannon amount" class="form-control">
+        <input type="number" name="nbOffensiveTroop" placeholder="Offensive Troop amount" class="form-control">
+        <input type="number" name="nbLogisticTroop" placeholder="Logistic Troop amount" class="form-control">
+        <input type="submit" value="Attack" class="btn btn-outline-secondary">
+    </form>
+    <hr>
+      <div class="bg-light px-0 border border-dark" style="height: 150px;">
+        <div class="overflow-auto h-100">
+          <div class="">01:22:44<p>Vous avez attaqué Lui</p></div><hr>
+          <div class="">01:22:44<p>Vous avez attaqué Lui</p></div><hr>
+          <div class="">01:22:44<p>Vous avez attaqué Lui</p></div><hr>
+          <div class="">01:22:44<p>Vous avez attaqué Lui</p></div>
+        </div>
+      </div>
+  </div>
+</div>
+
+<!-- <table>
     <tr>
         <th>id</th>
         <th>name</th>
@@ -133,9 +175,9 @@
             <td><?= $user->getCostLevelUpIndustry()[0] ?>I/<?= $user->getCostLevelUpIndustry()[1] ?>E</td>
         </tr>
     <?php endforeach; ?>
-</table>
-<hr>
-<table>
+</table> -->
+
+<!-- <table>
     <tr>
         <th>id</th>
         <th>idAttacker</th>
@@ -182,7 +224,7 @@
         echo "</tr>";
     }
     ?>
-</table>
-<hr>
+</table> -->
+
 </body>
 </html>
