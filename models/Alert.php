@@ -8,6 +8,10 @@ class Alert
         "warning" => "alert-warning",
         "info" => "alert-info",
     ];
+    const SUCCESS = "success";
+    const WARNING = "warning";
+    const INFO = "info";
+    const ERROR = "danger";
 
     public static function alert(string $message, string $type)
     {

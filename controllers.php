@@ -2,6 +2,7 @@
 require_once 'models/User.php';
 require_once 'models/Pages.php';
 require_once 'models/AttackEvent.php';
+require_once 'models/Alert.php';
 
 
 function init(){
@@ -19,6 +20,13 @@ function init(){
 
 function isLogged(){
     return isset($_SESSION["user"]);
+}
+
+function checkLogged(){
+    if (!isLogged()){
+        Alert::alert("You must be logged in to access this page", Alert::ERROR);
+        Pages::redirect(Pages::HOME);
+    }
 }
 
 function getJsonRequest($issetKeys = []){
@@ -41,8 +49,10 @@ function createAccount(){
     var_dump($color, $name, $password);
     if(isset($color) && isset($name) && isset($password) && $user->setColor($color) && $user->setName($name) && $user->setPassword($password) && $user->create()){
         $_SESSION["id"] = $user->getId();
+        Alert::alert("Account created", Alert::SUCCESS);
         Pages::redirect(Pages::GAME);
     }
+    Alert::alert("Error while creating account (username is already taken)", Alert::ERROR);
     Pages::redirect(Pages::HOME);
 }
 function login(){
@@ -55,6 +65,7 @@ function login(){
         $_SESSION["id"] = $user->getId();
         Pages::redirect(Pages::GAME);
     }
+    Alert::alert("Error while logging in (username or password is incorrect)", Alert::ERROR);
     Pages::redirect(Pages::HOME);
 }
 
@@ -64,36 +75,40 @@ function logout(){
 }
 
 function purchase(){
-    if(!isLogged())
-        Pages::redirect(Pages::HOME);
+    checkLogged();
     if(!isset($_POST['type']) || !isset($_POST['nb']))
+        Alert::alert("Error while purchasing", Alert::ERROR);
         Pages::redirect(Pages::GAME);
     $user = $_SESSION["user"];
     $type = $_POST["type"];
     $nb = $_POST["nb"];
     if(is_numeric($nb) && $user->purchase($type, intval($nb)) && $user->save()){
+        Alert::alert("Purchase successful", Alert::SUCCESS);
         Pages::redirect(Pages::GAME);
     }
+    Alert::alert("Error while purchasing (you didn't have enough resources or you reached the purchase limit)", Alert::ERROR);
     Pages::redirect(Pages::GAME);
 }
 function levelUp(){
-    if(!isLogged())
-        Pages::redirect(Pages::HOME);
+    checkLogged();
     if(!isset($_POST['type']))
+        Alert::alert("Error while leveling up", Alert::ERROR);
         Pages::redirect(Pages::GAME);
     $user = $_SESSION["user"];
     $type = $_POST["type"];
     if($user->levelUp($type) && $user->save()){
+        Alert::alert("Level up successful", Alert::SUCCESS);
         Pages::redirect(Pages::GAME);
     }
+    Alert::alert("Error while leveling up (you didn't have enough resources or you reached the level limit 9)", Alert::ERROR);
     Pages::redirect(Pages::GAME);
 }
 
 function attack(){
-    if(!isLogged())
-        Pages::redirect(Pages::HOME);
+    checkLogged();
     $user = $_SESSION["user"];
     if(!isset($_POST['idDefender']) || !isset($_POST['nbCannon']) || !isset($_POST['nbOffensiveTroop']) || !isset($_POST['nbLogisticTroop']))
+        Alert::alert("Error while attacking", Alert::ERROR);
         Pages::redirect(Pages::GAME);
     $idDefender = $_POST["idDefender"];
     $nbCannon = $_POST["nbCannon"];
@@ -101,8 +116,10 @@ function attack(){
     $nbLogisticTroop = $_POST["nbLogisticTroop"];
     if(is_numeric($idDefender) && is_numeric($nbCannon) && is_numeric($nbOffensiveTroop) && is_numeric($nbLogisticTroop) &&
         $user->attack(intval($idDefender), intval($nbCannon), intval($nbOffensiveTroop), intval($nbLogisticTroop)) && $user->save()){
+        Alert::alert("Attack successful", Alert::SUCCESS);
         Pages::redirect(Pages::GAME);
     }
+    Alert::alert("Error while attacking (you didn't have enough resources)", Alert::ERROR);
     Pages::redirect(Pages::GAME);
 }
 
@@ -114,8 +131,7 @@ function home(){
 }
 
 function game(){
-    if(!isLogged())
-        Pages::redirect(Pages::HOME);
+    checkLogged();
     $user = $_SESSION["user"];
     $users = User::getAllUsers();
     $attackEvents = AttackEvent::getAttackEventByUserId($user->getId());
