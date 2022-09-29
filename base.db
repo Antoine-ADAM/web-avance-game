@@ -7,11 +7,12 @@ CREATE TABLE IF NOT EXISTS user (
             color VARCHAR(7) NOT NULL,
             levelIndustry INT(6) NOT NULL,
             levelEnergy INT(6) NOT NULL,
-            nbIndustry INT(6) NOT NULL,
-            nbEnergy INT(6) NOT NULL,
-            nbCannon INT(6) NOT NULL,
-            nbOffensiveTroop INT(6) NOT NULL,
-            nbLogisticTroop INT(6) NOT NULL
+            nbIndustry BIGINT UNSIGNED NOT NULL,
+            nbEnergy BIGINT UNSIGNED NOT NULL,
+            nbCannon BIGINT UNSIGNED NOT NULL,
+            nbOffensiveTroop BIGINT UNSIGNED NOT NULL,
+            nbLogisticTroop BIGINT UNSIGNED NOT NULL,
+            last_update DATETIME default NOW() NOT NULL
         );
 
 create table last_update
@@ -22,22 +23,22 @@ create table last_update
 INSERT INTO last_update (last_update) VALUES (NOW());
 
 CREATE TABLE IF NOT EXISTS attack_event (
-                                            id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+                                            id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
                                             idAttacker INT(6) UNSIGNED NOT NULL,
                                             idDefender INT(6) UNSIGNED NOT NULL,
                                             finalDateTime DATETIME NOT NULL,
                                             startDateTime DATETIME NOT NULL,
-                                            nbCannon INT(6) UNSIGNED NOT NULL,
-                                            nbOffensiveTroop INT(6) UNSIGNED NOT NULL,
-                                            nbLogisticTroop INT(6) UNSIGNED NOT NULL,
+                                            nbCannon BIGINT UNSIGNED NOT NULL,
+                                            nbOffensiveTroop BIGINT UNSIGNED UNSIGNED NOT NULL,
+                                            nbLogisticTroop BIGINT UNSIGNED NOT NULL,
                                             status INT(1) UNSIGNED NOT NULL,
-                                            nbCannonLossAttacker INT(6) UNSIGNED,
-                                            nbOffensiveTroopLossAttacker INT(6) UNSIGNED,
-                                            nbLogisticTroopLossAttacker INT(6) UNSIGNED,
-                                            nbIndustrySteal INT(6) UNSIGNED,
-                                            nbCannonLossDefender INT(6) UNSIGNED,
-                                            nbOffensiveTroopLossDefender INT(6) UNSIGNED,
-                                            nbLogisticTroopLossDefender INT(6) UNSIGNED,
+                                            nbCannonLossAttacker BIGINT UNSIGNED,
+                                            nbOffensiveTroopLossAttacker BIGINT UNSIGNED,
+                                            nbLogisticTroopLossAttacker BIGINT UNSIGNED,
+                                            nbIndustrySteal BIGINT UNSIGNED,
+                                            nbCannonLossDefender BIGINT UNSIGNED,
+                                            nbOffensiveTroopLossDefender BIGINT UNSIGNED,
+                                            nbLogisticTroopLossDefender BIGINT UNSIGNED,
                                             defenderX INT(6) UNSIGNED NOT NULL,
                                             defenderY INT(6) UNSIGNED NOT NULL,
                                             attackerX INT(6) UNSIGNED NOT NULL,
