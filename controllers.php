@@ -76,9 +76,10 @@ function logout(){
 
 function purchase(){
     checkLogged();
-    if(!isset($_POST['type']) || !isset($_POST['nb']))
+    if(!isset($_POST['type']) || !isset($_POST['nb'])) {
         Alert::pushAlert("Error while purchasing", Alert::ERROR);
         Pages::redirect(Pages::GAME);
+    }
     $user = $_SESSION["user"];
     $type = $_POST["type"];
     $nb = $_POST["nb"];
@@ -91,9 +92,10 @@ function purchase(){
 }
 function levelUp(){
     checkLogged();
-    if(!isset($_POST['type']))
+    if(!isset($_POST['type'])) {
         Alert::pushAlert("Error while leveling up", Alert::ERROR);
         Pages::redirect(Pages::GAME);
+    }
     $user = $_SESSION["user"];
     $type = $_POST["type"];
     if($user->levelUp($type) && $user->save()){
@@ -107,9 +109,10 @@ function levelUp(){
 function attack(){
     checkLogged();
     $user = $_SESSION["user"];
-    if(!isset($_POST['idDefender']) || !isset($_POST['nbCannon']) || !isset($_POST['nbOffensiveTroop']) || !isset($_POST['nbLogisticTroop']))
+    if(!isset($_POST['idDefender']) || !isset($_POST['nbCannon']) || !isset($_POST['nbOffensiveTroop']) || !isset($_POST['nbLogisticTroop'])) {
         Alert::pushAlert("Error while attacking", Alert::ERROR);
         Pages::redirect(Pages::GAME);
+    }
     $idDefender = $_POST["idDefender"];
     $nbCannon = $_POST["nbCannon"];
     $nbOffensiveTroop = $_POST["nbOffensiveTroop"];
