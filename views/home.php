@@ -11,7 +11,7 @@
       </div>
     </nav>
     <!-- Surcouche MYSQLI pour la fonction query pour renforcer la sécurité -->
-    <div class="row justify-content-center mt-5">
+    <div class="row justify-content-center mt-5 w-100">
         <div class="col-4">
             <form action="<?= Pages::toURL(Pages::LOGIN) ?>" style="text-align: right;" method="post">
                 <h3>Login</h3>
