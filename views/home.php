@@ -7,10 +7,13 @@
 <body>
     <nav class="navbar navbar-dark bg-dark">
       <div class="container-fluid">
-        <div class="text-light mx-auto h1">Home</div>
+        <div class="text-light mx-auto h2">Home</div>
       </div>
     </nav>
     <!-- Surcouche MYSQLI pour la fonction query pour renforcer la sécurité -->
+    <div class="text-center p-4">
+        <?php Alert::displayAlerts() ?>
+    </div>
     <div class="row justify-content-center mt-5 w-100">
         <div class="col-4">
             <form action="<?= Pages::toURL(Pages::LOGIN) ?>" style="text-align: right;" method="post">

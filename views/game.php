@@ -35,6 +35,11 @@
             <li>Industry amount: <?= $user->getNbIndustry() ?></li>
             <li>Energy amount: <?= $user->getNbEnergy() ?></li>
         </ul>
+        <ul class="col-3">
+            <?php Alert::displayAlerts() ?>
+            ET
+            <?php var_dump($_SESSION); ?>
+        </ul>
     </div>
 </div>
 
@@ -62,10 +67,6 @@
     <u><b>Level Up</b></u>
     
     <label>
-    
-<?php Alert::displayAlerts() ?>
-<form action="<?= Pages::toURL(Pages::PURCHASE) ?>" method="post">
-    <select name="type" id="fdsgfds">
         <?php
             if(!is_null($user->getCostLevelUpIndustry())){
                 echo $user->getCostLevelUpIndustry()[0] ?>I/<?php  echo $user->getCostLevelUpIndustry()[1] 
@@ -221,10 +222,10 @@
         echo "<td>" . $attackEvent->getNbOffensiveTroopLossDefender() . "</td>";
         echo "<td>" . $attackEvent->getNbLogisticTroopLossDefender() . "</td>";
         echo "<td>x:" . ($attackEvent->getStatus()==0?$attackEvent->actualPosition()[0]." y:".$attackEvent->actualPosition()[1]:"FALSE") . "</td>";
-        /*echo "<td>" . $attackEvent->getDefenderX() . "</td>";
+        echo "<td>" . $attackEvent->getDefenderX() . "</td>";
         echo "<td>" . $attackEvent->getDefenderY() . "</td>";
         echo "<td>" . $attackEvent->getAttackerX() . "</td>";
-        echo "<td>" . $attackEvent->getAttackerY() . "</td>";*/
+        echo "<td>" . $attackEvent->getAttackerY() . "</td>";
         echo "</tr>";
     }
     ?>

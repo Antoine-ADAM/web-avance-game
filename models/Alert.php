@@ -27,8 +27,8 @@ class Alert
     }
 
     public static function getAlerts(){
-        if($_SESSION["alerts"]==null){
-            $_SESSION["alerts"] = [];
+        if(!isset($_SESSION) OR !isset($_SESSION["alerts"])){
+            return array();
         }
         $alerts = $_SESSION["alerts"];
         $_SESSION["alerts"] = [];
