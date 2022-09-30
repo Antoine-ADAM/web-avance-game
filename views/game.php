@@ -37,8 +37,6 @@
         </ul>
         <ul class="col-3">
             <?php Alert::displayAlerts() ?>
-            ET
-            <?php var_dump($_SESSION); ?>
         </ul>
     </div>
 </div>
@@ -103,10 +101,10 @@
 
 
 <div id="screen">
-  <?php foreach ($users as $user): ?>
+  <?php foreach ($users as $userDot): ?>
     <div
        class="player_dot"
-       style="top: <?=$user->getY() * 3; ?>px; left: <?=$user->getY() * 3; ?>px; background-color: <?=$user->getColor(); ?>;">
+       style="top: <?=$userDot->getY() * 3; ?>px; left: <?=$userDot->getY() * 3; ?>px; background-color: <?=$userDot->getColor(); ?>;">
     </div>
   <?php endforeach; ?>
 </div>
@@ -114,7 +112,36 @@
 <div id="screen-right" class="container p-3">
 
     <u><b>Ongoing attack</b></u><br>
-    None
+    <?php
+    foreach ($attackEvents as $attackEvent) {
+        if($attackEvent->getIdAttacker() == $user->getId()){
+            echo "A : ".$attackEvent->getIdDefender();
+        }
+        /*echo "<tr>";
+        echo "<td>" . $attackEvent->getId() . "</td>";
+        echo "<td>" . $attackEvent->getIdAttacker() . "</td>";
+        echo "<td>" . $attackEvent->getIdDefender() . "</td>";
+        echo "<td>" . $attackEvent->getFinalDateTime()->format("Y-m-d H:i:s") . "</td>";
+        echo "<td>" . $attackEvent->getStartDateTime()->format("Y-m-d H:i:s") . "</td>";
+        echo "<td>" . $attackEvent->getNbCannon() . "</td>";
+        echo "<td>" . $attackEvent->getNbOffensiveTroop() . "</td>";
+        echo "<td>" . $attackEvent->getNbLogisticTroop() . "</td>";
+        echo "<td>" . $attackEvent->getStatus() . "</td>";
+        echo "<td>" . $attackEvent->getNbCannonLossAttacker() . "</td>";
+        echo "<td>" . $attackEvent->getNbOffensiveTroopLossAttacker() . "</td>";
+        echo "<td>" . $attackEvent->getNbLogisticTroopLossAttacker() . "</td>";
+        echo "<td>" . $attackEvent->getNbIndustrySteal() . "</td>";
+        echo "<td>" . $attackEvent->getNbCannonLossDefender() . "</td>";
+        echo "<td>" . $attackEvent->getNbOffensiveTroopLossDefender() . "</td>";
+        echo "<td>" . $attackEvent->getNbLogisticTroopLossDefender() . "</td>";
+        echo "<td>x:" . ($attackEvent->getStatus()==0?$attackEvent->actualPosition()[0]." y:".$attackEvent->actualPosition()[1]:"FALSE") . "</td>";
+        echo "<td>" . $attackEvent->getDefenderX() . "</td>";
+        echo "<td>" . $attackEvent->getDefenderY() . "</td>";
+        echo "<td>" . $attackEvent->getAttackerX() . "</td>";
+        echo "<td>" . $attackEvent->getAttackerY() . "</td>";
+        echo "</tr>";*/
+    }
+    ?>
     <hr>
     <u><b>Current defense</b></u><br>
     None<br>
