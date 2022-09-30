@@ -62,6 +62,10 @@
     <u><b>Level Up</b></u>
     
     <label>
+    
+<?php Alert::displayAlerts() ?>
+<form action="<?= Pages::toURL(Pages::PURCHASE) ?>" method="post">
+    <select name="type" id="fdsgfds">
         <?php
             if(!is_null($user->getCostLevelUpIndustry())){
                 echo $user->getCostLevelUpIndustry()[0] ?>I/<?php  echo $user->getCostLevelUpIndustry()[1] 

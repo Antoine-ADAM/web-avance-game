@@ -81,15 +81,19 @@ class User
         return true;
     }
 
-    function getCostLevelUpIndustry(){
+    function getCostLevelUpIndustry()
+    {
         # [costIndustry, costEnergy]
-        $factor = pow(2, $this->levelIndustry);
-        return [200 * $factor, 10 * $factor];
+        if ($this->levelIndustry < 10) {
+            $factor = pow(2, $this->levelIndustry);
+            return [200 * $factor, 10 * $factor];
+        }else
+            return null;
     }
 
     function levelUpIndustry(){
         $cost = $this->getCostLevelupIndustry();
-        if($this->nbIndustry >= $cost[0] && $this->nbEnergy >= $cost[1]){
+        if($cost != null && $this->nbIndustry >= $cost[0] && $this->nbEnergy >= $cost[1]){
             $this->nbIndustry -= $cost[0];
             $this->nbEnergy -= $cost[1];
             $this->levelIndustry++;
@@ -100,13 +104,17 @@ class User
 
     function getCostLevelUpEnergy(){
         # [costIndustry, costEnergy]
-        $factor = pow(2, $this->levelEnergy);
-        return [100 * $factor, 0];
+        if ($this->levelEnergy < 10) {
+            $factor = pow(2, $this->levelEnergy);
+            return [100 * $factor, 0];
+        }else{
+            return null;
+        }
     }
 
     function levelUpEnergy(){
         $cost = $this->getCostLevelupEnergy();
-        if($this->nbIndustry >= $cost[0] && $this->nbEnergy >= $cost[1]){
+        if($cost != null && $this->nbIndustry >= $cost[0] && $this->nbEnergy >= $cost[1]){
             $this->nbIndustry -= $cost[0];
             $this->nbEnergy -= $cost[1];
             $this->nbEnergy+=200*pow(2, $this->levelEnergy);
@@ -193,7 +201,7 @@ class User
 
     static public function updateNbIndustryAll(){
         MyDB::getDB()->multi_query("SET @delta = (SELECT TIMESTAMPDIFF(SECOND, last_update, NOW()) FROM last_update);
-UPDATE user SET nbIndustry = nbIndustry + @delta * POW(2, levelIndustry);
+UPDATE user SET nbIndustry = nbIndustry + @delta * (POW(2, levelIndustry) * 5 - 5) WHERE nbIndustry + @delta * POW(2, levelIndustry) * 5 - 5  < 2000000000;
 UPDATE last_update SET last_update = NOW() WHERE 1;");
         do {
             if ($result = MyDB::getDB()->store_result()) {
@@ -240,7 +248,7 @@ UPDATE last_update SET last_update = NOW() WHERE 1;");
     public function cannonPurchase($nbCannon)
     {
         $cost = $this->getCostCannon($nbCannon);
-        if($this->nbIndustry >= $cost[0] && $this->nbEnergy >= $cost[1]){
+        if($cost != null && $this->nbIndustry >= $cost[0] && $this->nbEnergy >= $cost[1]){
             $this->nbIndustry -= $cost[0];
             $this->nbEnergy -= $cost[1];
             $this->nbCannon += $nbCannon;
@@ -251,13 +259,16 @@ UPDATE last_update SET last_update = NOW() WHERE 1;");
 
     private function getCostCannon($nbCannon)
     {
+        if($nbCannon + $this->nbCannon > 2000000000){
+            return null;
+        }
         return [15 * $nbCannon,2 * $nbCannon];
     }
 
     public function offensiveTroopPurchase($nbOffensiveTroop)
     {
         $cost = $this->getCostOffensiveTroop($nbOffensiveTroop);
-        if($this->nbIndustry >= $cost[0] && $this->nbEnergy >= $cost[1]){
+        if($cost != null && $this->nbIndustry >= $cost[0] && $this->nbEnergy >= $cost[1]){
             $this->nbIndustry -= $cost[0];
             $this->nbEnergy -= $cost[1];
             $this->nbOffensiveTroop += $nbOffensiveTroop;
@@ -268,13 +279,16 @@ UPDATE last_update SET last_update = NOW() WHERE 1;");
 
     private function getCostOffensiveTroop($nbOffensiveTroop)
     {
+        if($nbOffensiveTroop + $this->nbOffensiveTroop > 2000000000){
+            return null;
+        }
         return [10 * $nbOffensiveTroop, 0];
     }
 
     public function logisticTroopPurchase($nbLogisticTroop)
     {
         $cost = $this->getCostLogisticTroop($nbLogisticTroop);
-        if($this->nbIndustry >= $cost[0] && $this->nbEnergy >= $cost[1]){
+        if($cost != null && $this->nbIndustry >= $cost[0] && $this->nbEnergy >= $cost[1]){
             $this->nbIndustry -= $cost[0];
             $this->nbEnergy -= $cost[1];
             $this->nbLogisticTroop += $nbLogisticTroop;
@@ -285,6 +299,9 @@ UPDATE last_update SET last_update = NOW() WHERE 1;");
 
     private function getCostLogisticTroop($nbLogisticTroop)
     {
+        if($nbLogisticTroop + $this->nbLogisticTroop > 2000000000){
+            return null;
+        }
         return [10 * $nbLogisticTroop, 0];
     }
 
@@ -338,7 +355,7 @@ UPDATE last_update SET last_update = NOW() WHERE 1;");
     }
 
     public function attack($idDefender, $nbCannon, $nbOffensiveTroop, $nbLogisticTroop){
-        if (!User::isExist($idDefender) or $idDefender == $this->id or $nbCannon < 0 or $nbOffensiveTroop < 0 or $nbLogisticTroop < 0 or $nbCannon > $this->nbCannon or $nbOffensiveTroop > $this->nbOffensiveTroop or $nbLogisticTroop > $this->nbLogisticTroop) {
+        if (!User::isExist($idDefender) or ($nbLogisticTroop == 0 and $nbCannon == 0 and $nbOffensiveTroop == 0) or $idDefender == $this->id or $nbCannon < 0 or $nbOffensiveTroop < 0 or $nbLogisticTroop < 0 or $nbCannon > $this->nbCannon or $nbOffensiveTroop > $this->nbOffensiveTroop or $nbLogisticTroop > $this->nbLogisticTroop) {
             return false;
         }
         $attackEvent = new AttackEvent();
