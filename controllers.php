@@ -24,7 +24,7 @@ function isLogged(){
 
 function checkLogged(){
     if (!isLogged()){
-        Alert::alert("You must be logged in to access this page", Alert::ERROR);
+        Alert::pushAlert("You must be logged in to access this page", Alert::ERROR);
         Pages::redirect(Pages::HOME);
     }
 }
@@ -49,10 +49,10 @@ function createAccount(){
     var_dump($color, $name, $password);
     if(isset($color) && isset($name) && isset($password) && $user->setColor($color) && $user->setName($name) && $user->setPassword($password) && $user->create()){
         $_SESSION["id"] = $user->getId();
-        Alert::alert("Account created", Alert::SUCCESS);
+        Alert::pushAlert("Account created", Alert::SUCCESS);
         Pages::redirect(Pages::GAME);
     }
-    Alert::alert("Error while creating account (username is already taken)", Alert::ERROR);
+    Alert::pushAlert("Error while creating account (username is already taken)", Alert::ERROR);
     Pages::redirect(Pages::HOME);
 }
 function login(){
@@ -65,7 +65,7 @@ function login(){
         $_SESSION["id"] = $user->getId();
         Pages::redirect(Pages::GAME);
     }
-    Alert::alert("Error while logging in (username or password is incorrect)", Alert::ERROR);
+    Alert::pushAlert("Error while logging in (username or password is incorrect)", Alert::ERROR);
     Pages::redirect(Pages::HOME);
 }
 
@@ -77,30 +77,30 @@ function logout(){
 function purchase(){
     checkLogged();
     if(!isset($_POST['type']) || !isset($_POST['nb']))
-        Alert::alert("Error while purchasing", Alert::ERROR);
+        Alert::pushAlert("Error while purchasing", Alert::ERROR);
         Pages::redirect(Pages::GAME);
     $user = $_SESSION["user"];
     $type = $_POST["type"];
     $nb = $_POST["nb"];
     if(is_numeric($nb) && $user->purchase($type, intval($nb)) && $user->save()){
-        Alert::alert("Purchase successful", Alert::SUCCESS);
+        Alert::pushAlert("Purchase successful", Alert::SUCCESS);
         Pages::redirect(Pages::GAME);
     }
-    Alert::alert("Error while purchasing (you didn't have enough resources or you reached the purchase limit)", Alert::ERROR);
+    Alert::pushAlert("Error while purchasing (you didn't have enough resources or you reached the purchase limit)", Alert::ERROR);
     Pages::redirect(Pages::GAME);
 }
 function levelUp(){
     checkLogged();
     if(!isset($_POST['type']))
-        Alert::alert("Error while leveling up", Alert::ERROR);
+        Alert::pushAlert("Error while leveling up", Alert::ERROR);
         Pages::redirect(Pages::GAME);
     $user = $_SESSION["user"];
     $type = $_POST["type"];
     if($user->levelUp($type) && $user->save()){
-        Alert::alert("Level up successful", Alert::SUCCESS);
+        Alert::pushAlert("Level up successful", Alert::SUCCESS);
         Pages::redirect(Pages::GAME);
     }
-    Alert::alert("Error while leveling up (you didn't have enough resources or you reached the level limit 9)", Alert::ERROR);
+    Alert::pushAlert("Error while leveling up (you didn't have enough resources or you reached the level limit 9)", Alert::ERROR);
     Pages::redirect(Pages::GAME);
 }
 
@@ -108,7 +108,7 @@ function attack(){
     checkLogged();
     $user = $_SESSION["user"];
     if(!isset($_POST['idDefender']) || !isset($_POST['nbCannon']) || !isset($_POST['nbOffensiveTroop']) || !isset($_POST['nbLogisticTroop']))
-        Alert::alert("Error while attacking", Alert::ERROR);
+        Alert::pushAlert("Error while attacking", Alert::ERROR);
         Pages::redirect(Pages::GAME);
     $idDefender = $_POST["idDefender"];
     $nbCannon = $_POST["nbCannon"];
@@ -116,10 +116,10 @@ function attack(){
     $nbLogisticTroop = $_POST["nbLogisticTroop"];
     if(is_numeric($idDefender) && is_numeric($nbCannon) && is_numeric($nbOffensiveTroop) && is_numeric($nbLogisticTroop) &&
         $user->attack(intval($idDefender), intval($nbCannon), intval($nbOffensiveTroop), intval($nbLogisticTroop)) && $user->save()){
-        Alert::alert("Attack successful", Alert::SUCCESS);
+        Alert::pushAlert("Attack successful", Alert::SUCCESS);
         Pages::redirect(Pages::GAME);
     }
-    Alert::alert("Error while attacking (you didn't have enough resources)", Alert::ERROR);
+    Alert::pushAlert("Error while attacking (you didn't have enough resources)", Alert::ERROR);
     Pages::redirect(Pages::GAME);
 }
 

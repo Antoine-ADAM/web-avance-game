@@ -13,7 +13,7 @@ class Alert
     const INFO = "info";
     const ERROR = "danger";
 
-    public static function alert(string $message, string $type)
+    public static function pushAlert(string $message, string $type)
     {
         if (isset(self::TYPES[$type])) {
             if($_SESSION["alerts"]==null){
