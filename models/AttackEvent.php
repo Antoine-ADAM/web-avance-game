@@ -1,5 +1,6 @@
 <?php
 require_once "db.php";
+require_once "Message.php";
 class AttackEvent
 {
     private $id;
@@ -171,6 +172,8 @@ class AttackEvent
                 $userAttacker->setNbLogisticTroop($userAttacker->getNbLogisticTroop() + $nbLogisticTroopAttacker);
                 $userAttacker->setNbIndustry($userAttacker->getNbIndustry() + $this->nbIndustrySteal);
                 $userAttacker->save();
+                Message::pushMessage($this->idAttacker, Message::TYPE_PERSONAL_NOTIFICATION, "You have won the attack against " . $userDefender->getName() . " ! You have stolen " . $this->nbIndustrySteal . " industry and lost " . $this->nbCannonLossAttacker . " cannon, " . $this->nbOffensiveTroopLossAttacker . " offensive troop and " . $this->nbLogisticTroopLossAttacker . " logistic troop.");
+                Message::pushMessage($this->idDefender, Message::TYPE_PERSONAL_NOTIFICATION, "You have lost the attack against " . $userAttacker->getName() . " ! You have lost " . $this->nbCannonLossDefender . " cannon, " . $this->nbOffensiveTroopLossDefender . " offensive troop and " . $this->nbLogisticTroopLossDefender . " logistic troop.");
             }elseif ($nbCannonAttacker <= 0 && $nbOffensiveTroopAttacker <= 0) {
                 $this->status = 2;
                 $this->nbCannonLossDefender = $userDefender->getNbCannon() - $nbCannonDefender;
@@ -184,6 +187,8 @@ class AttackEvent
                 $userDefender->setNbOffensiveTroop($nbOffensiveTroopDefender);
                 $userDefender->setNbLogisticTroop($nbLogisticTroopDefender);
                 $userDefender->save();
+                Message::pushMessage($this->idAttacker, Message::TYPE_PERSONAL_NOTIFICATION, "You have lost the attack against " . $userDefender->getName() . " ! You have lost " . $this->nbCannonLossAttacker . " cannon, " . $this->nbOffensiveTroopLossAttacker . " offensive troop and " . $this->nbLogisticTroopLossAttacker . " logistic troop.");
+                Message::pushMessage($this->idDefender, Message::TYPE_PERSONAL_NOTIFICATION, "You have won the attack against " . $userAttacker->getName() . " ! You have lost " . $this->nbCannonLossDefender . " cannon, " . $this->nbOffensiveTroopLossDefender . " offensive troop and " . $this->nbLogisticTroopLossDefender . " logistic troop.");
             }elseif ($step <= 0) {
                 $this->status = 3;
                 $this->nbCannonLossDefender = $userDefender->getNbCannon() - $nbCannonDefender;
@@ -203,6 +208,8 @@ class AttackEvent
                 $userAttacker->setNbOffensiveTroop($userAttacker->getNbOffensiveTroop() + $nbOffensiveTroopAttacker);
                 $userAttacker->setNbLogisticTroop($userAttacker->getNbLogisticTroop() + $nbLogisticTroopAttacker);
                 $userAttacker->save();
+                Message::pushMessage($this->idAttacker, Message::TYPE_PERSONAL_NOTIFICATION, "You have lost the attack against " . $userDefender->getName() . " ! You have lost " . $this->nbCannonLossAttacker . " cannon, " . $this->nbOffensiveTroopLossAttacker . " offensive troop and " . $this->nbLogisticTroopLossAttacker . " logistic troop.");
+                Message::pushMessage($this->idDefender, Message::TYPE_PERSONAL_NOTIFICATION, "You have win the attack against " . $userAttacker->getName() . " ! You have lost " . $this->nbCannonLossDefender . " cannon, " . $this->nbOffensiveTroopLossDefender . " offensive troop and " . $this->nbLogisticTroopLossDefender . " logistic troop.");
             }
 
         }

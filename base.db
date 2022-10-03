@@ -1,3 +1,8 @@
+DROP TABLE user;
+DROP TABLE last_update;
+DROP TABLE attack_event;
+DROP TABLE messages;
+
 CREATE TABLE IF NOT EXISTS user (
             id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
             x INT(3) NOT NULL,
@@ -44,3 +49,10 @@ CREATE TABLE IF NOT EXISTS attack_event (
                                             attackerX INT(6) UNSIGNED NOT NULL,
                                             attackerY INT(6) UNSIGNED NOT NULL
 );
+CREATE TABLE IF NOT EXISTS messages (
+            id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+            id_sender INT(6) UNSIGNED NOT NULL,
+            type INT(1) UNSIGNED NOT NULL,
+            content VARCHAR(255) NOT NULL,
+            date TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+            );

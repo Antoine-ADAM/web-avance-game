@@ -3,6 +3,7 @@ require_once 'controllers.php';
 require_once 'models/Pages.php';
 
 init();
+
 switch ($_GET['page']){
     case Pages::HOME:
         home();
@@ -27,6 +28,9 @@ switch ($_GET['page']){
         break;
     case Pages::LEVEL_UP:
         levelUp();
+        break;
+    case Pages::MESSAGE:
+        message();
         break;
     default:
         Pages::redirect(Pages::HOME);

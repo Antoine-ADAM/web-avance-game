@@ -3,6 +3,7 @@ require_once 'models/User.php';
 require_once 'models/Pages.php';
 require_once 'models/AttackEvent.php';
 require_once 'models/Alert.php';
+require_once 'models/Message.php';
 
 
 function init(){
@@ -84,6 +85,7 @@ function purchase(){
     $nb = $_POST["nb"];
     if(is_numeric($nb) && $user->purchase($type, intval($nb)) && $user->save()){
         Alert::pushAlert("Purchase successful", Alert::SUCCESS);
+        Message::pushMessage($user->getId(), Message::TYPE_PERSONAL_NOTIFICATION, "You have purchased $nb $type");
         Pages::redirect(Pages::GAME);
     }
     Alert::pushAlert("Error while purchasing (you didn't have enough resources or you reached the purchase limit)", Alert::ERROR);
@@ -99,6 +101,7 @@ function levelUp(){
     $type = $_POST["type"];
     if($user->levelUp($type) && $user->save()){
         Alert::pushAlert("Level up successful", Alert::SUCCESS);
+        Message::pushMessage($user->getId(), Message::TYPE_PERSONAL_NOTIFICATION, "You have leveled up your $type");
         Pages::redirect(Pages::GAME);
     }
     Alert::pushAlert("Error while leveling up (you didn't have enough resources or you reached the level limit 9)", Alert::ERROR);
@@ -119,10 +122,26 @@ function attack(){
     if(is_numeric($idDefender) && is_numeric($nbCannon) && is_numeric($nbOffensiveTroop) && is_numeric($nbLogisticTroop) &&
         $user->attack(intval($idDefender), intval($nbCannon), intval($nbOffensiveTroop), intval($nbLogisticTroop)) && $user->save()){
         Alert::pushAlert("Attack successful", Alert::SUCCESS);
+        Message::pushMessage($idDefender, Message::TYPE_PERSONAL_NOTIFICATION, "You have been attacked by ".$user->getName()." ! with ".$nbCannon." cannons, ".$nbOffensiveTroop." offensive troops and ".$nbLogisticTroop." logistic troops");
+        Message::pushMessage($user->getId(), Message::TYPE_PERSONAL_NOTIFICATION, "You have attacked ".$idDefender." ! with ".$nbCannon." cannons, ".$nbOffensiveTroop." offensive troops and ".$nbLogisticTroop." logistic troops");
         Pages::redirect(Pages::GAME);
     }
     Alert::pushAlert("Error while attacking (you didn't have enough resources)", Alert::ERROR);
     Pages::redirect(Pages::GAME);
+}
+
+function message(){
+    checkLogged();
+    $user = $_SESSION["user"];
+    if(!isset($_POST['message'])) {
+        Alert::pushAlert("Error while sending message", Alert::ERROR);
+        Pages::redirect(Pages::GAME);
+    }
+    $message = $_POST["message"];
+    if (Message::pushMessage($user->getId(), Message::TYPE_CHAT_ALL, $message)){
+        Alert::pushAlert("Message sent", Alert::SUCCESS);
+        Pages::redirect(Pages::GAME);
+    }
 }
 
 
@@ -137,5 +156,6 @@ function game(){
     $user = $_SESSION["user"];
     $users = User::getAllUsers();
     $attackEvents = AttackEvent::getAttackEventByUserId($user->getId());
-    Pages::render("game.php", ["user" => $user, "users" => $users, "attackEvents" => $attackEvents]);
+    $messages = Message::getMessagesForUser($user->getId());
+    Pages::render("game.php", ["user" => $user, "users" => $users, "attackEvents" => $attackEvents, "messages" => $messages]);
 }

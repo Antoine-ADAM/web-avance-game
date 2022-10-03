@@ -13,6 +13,7 @@ class Pages
     const PURCHASE = "purchase";
     const LEVEL_UP = "levelUp";
     const ATTACK = "attack";
+    const MESSAGE = "message";
 
 
     static function toURL($page, $params = [])
