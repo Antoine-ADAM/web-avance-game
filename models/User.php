@@ -157,11 +157,10 @@ class User
         if($max == 0){
             die("TOO USERS");
         }
-
         # create user
         $res = MyDB::query("INSERT INTO user (x, y, name, password, color, levelIndustry, levelEnergy, nbIndustry, nbEnergy, nbCannon, nbOffensiveTroop, nbLogisticTroop) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [$x, $y, $this->name, password_hash($this->password, ALGO_HASH), $this->color, 0, 0, 500, 0, 0, 0, 0]);
-        if ($res) {
-            $this->id = $res->fetch_assoc()['id'];
+        if (!$res) {
+            $this->id = MyDB::getDB()->insert_id;
             return true;
         }
         return false;

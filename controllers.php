@@ -46,7 +46,6 @@ function createAccount(){
     $name = $_POST['name'];
     $password = $_POST['password'];
     $user = new User();
-    var_dump($color, $name, $password);
     if(isset($color) && isset($name) && isset($password) && $user->setColor($color) && $user->setName($name) && $user->setPassword($password) && $user->create()){
         $_SESSION["id"] = $user->getId();
         Alert::pushAlert("Account created", Alert::SUCCESS);
