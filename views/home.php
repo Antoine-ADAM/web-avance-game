@@ -14,42 +14,44 @@
     <div class="text-center p-4">
         <?php Alert::displayAlerts() ?>
     </div>
-    <div class="row justify-content-center mt-5 w-100">
-        <div class="col-4">
-            <form action="<?= Pages::toURL(Pages::LOGIN) ?>" style="text-align: right;" method="post">
-                <h3>Login</h3>
-                <div class="form-outline mb-4">
-                    <input type="text" name="name" placeholder="Name" pattern="^[a-zA-Z0-9_]{3,16}$" required>
-                </div>
+    <div class="container p-3 border" style="max-width: 700px;">
+        <div class="row justify-content-center mt-5 w-100">
+            <div class="col-4">
+                <form action="<?= Pages::toURL(Pages::LOGIN) ?>" style="text-align: right;" method="post">
+                    <h3>Login</h3>
+                    <div class="form-outline mb-4">
+                        <input type="text" name="name" placeholder="Name" pattern="^[a-zA-Z0-9_]{3,16}$" required>
+                    </div>
 
-                <div class="form-outline mb-4">
-                    <input type="password" name="password" placeholder="Password" minlength="8" required>
-                </div>
+                    <div class="form-outline mb-4">
+                        <input type="password" name="password" placeholder="Password" minlength="8" required>
+                    </div>
 
-                <input type="submit" value="Login" class="btn btn-primary btn-block mb-4">
+                    <input type="submit" value="Login" class="btn btn-primary btn-block mb-4">
 
-            </form>
-        </div>
-        <div class="col-4 text-left">
-            <form onsubmit="return check()" action="<?= Pages::toURL(Pages::REGISTER) ?>" method="post" required>
-                <h3>Register</h3>
-                <div class="form-outline mb-4">
-                    <input type="text" name="name" placeholder="Name" pattern="^[a-zA-Z0-9_]{3,16}$" required>
-                </div>
-                <div class="form-outline mb-4">
-                    <input type="password" id="password" name="password" placeholder="Password" minlength="8" onkeyup="check()" required>
-                </div>
-                <div class="form-outline mb-4">
-                    <input type="password" id="confirm_password" name="confirm_password" placeholder="Confirm password" minlength="8" onkeyup="check()" required>
-                </div>
-                <div class="form-outline mb-4">
-                    <span id='message'></span>
-                </div>
-                <div class="form-outline mb-4">
-                    <input type="color" name="color" placeholder="color" required>
-                </div>
-                <input type="submit" value="Register" class="btn btn-primary btn-block mb-4">
-            </form>
+                </form>
+            </div>
+            <div class="col-4 text-left">
+                <form onsubmit="return check()" action="<?= Pages::toURL(Pages::REGISTER) ?>" method="post" required>
+                    <h3>Register</h3>
+                    <div class="form-outline mb-4">
+                        <input type="text" name="name" placeholder="Name" pattern="^[a-zA-Z0-9_]{3,16}$" required>
+                    </div>
+                    <div class="form-outline mb-4">
+                        <input type="password" id="password" name="password" placeholder="Password" minlength="8" onkeyup="check()" required>
+                    </div>
+                    <div class="form-outline mb-4">
+                        <input type="password" id="confirm_password" name="confirm_password" placeholder="Confirm password" minlength="8" onkeyup="check()" required>
+                    </div>
+                    <div class="form-outline mb-4">
+                        <span id='message'></span>
+                    </div>
+                    <div class="form-outline mb-4">
+                        <input type="color" name="color" placeholder="color" required>
+                    </div>
+                    <input type="submit" value="Register" class="btn btn-primary btn-block mb-4">
+                </form>
+            </div>
         </div>
     </div>
     <script type="text/javascript">

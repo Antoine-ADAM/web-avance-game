@@ -69,7 +69,7 @@
     <hr>
     <u><b>🆙 Level Up</b></u>
     
-    <label class="mt-2">
+    <div class="mt-2">
         <?php
             if(!is_null($user->getCostLevelUpIndustry())){
                 echo $user->getCostLevelUpIndustry()[0] ?>🔧 <?php  echo $user->getCostLevelUpIndustry()[1] 
@@ -82,8 +82,8 @@
             }else{ ?>
                 <button class="btn btn-outline-secondary disabled">Max Industry level reached !</button>
             <?php } ?>
-    </label>
-    <label class="mt-2">
+    </div>
+    <div class="mt-2">
         <?php
             if(!is_null($user->getCostLevelUpEnergy())){
                 echo $user->getCostLevelUpEnergy()[0] ?>🔧 <?php  echo $user->getCostLevelUpEnergy()[1] 
@@ -96,7 +96,7 @@
             }else{ ?>
                 <button class="btn btn-outline-secondary disabled">Max Energy level reached !</button>
             <?php } ?>
-    </label>
+    </div>
     
 </div>
 
@@ -105,7 +105,12 @@
   <?php foreach ($users as $userDot): ?>
     <div
        class="player_dot"
-       style="top: <?=$userDot->getY() * 3; ?>px; left: <?=$userDot->getX() * 3; ?>px; background-color: <?=$userDot->getColor(); ?>;">
+       style="top: <?=$userDot->getY() * 3; ?>px; left: <?=$userDot->getX() * 3; ?>px; background-color: <?=$userDot->getColor(); ?>;"
+       title="<?=$userDot->getName()?>&#13;
+       x: <?=$userDot->getX()?> y: <?=$userDot->getY()?>&#13;
+       <?=$userDot->getLevelIndustry()?>🏭 <?=$userDot->getLevelEnergy()?>☢️&#13;
+       <?=$userDot->getNbCannon()?>💣 <?=$userDot->getNbOffensiveTroop()?>💪&#13;
+       <?=$userDot->getNbLogisticTroop()?>🛡️">
     </div>
   <?php endforeach; ?>
 </div>

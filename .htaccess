@@ -28,3 +28,14 @@ RewriteRule ^attack$ index.php?page=attack [L]
 
 # Forbid listing
 Options -Indexes
+
+
+<Files "base.db">  
+  Order allow,deny
+  Deny from all
+</Files>
+
+<Files ".gitignore">  
+  Order allow,deny
+  Deny from all
+</Files>
