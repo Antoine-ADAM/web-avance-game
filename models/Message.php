@@ -83,7 +83,7 @@ class Message
 
     static function getMessagesForUser($id_user): array
     {
-        $res = MyDB::query("SELECT * FROM messages WHERE id_sender = ? OR type = ?", [$id_user, Message::TYPE_CHAT_ALL]);
+        $res = MyDB::query("SELECT * FROM messages WHERE id_sender = ? OR type = ? ORDER BY date", [$id_user, Message::TYPE_CHAT_ALL]);
         $messages = [];
         while ($row = $res->fetch_assoc()) {
             $message = new Message();
