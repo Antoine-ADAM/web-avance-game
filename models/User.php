@@ -417,4 +417,14 @@ UPDATE last_update SET last_update = NOW() WHERE 1;");
         return $this->color;
     }
 
+    public static function isUpdate($id): bool
+    {
+        $st = MyDB::query("SELECT is_update FROM user WHERE id = ?", [$id]);
+        return is_bool($st) or $st->fetch_assoc()['is_update'];
+    }
+
+    public static function setUpdate($id, $isUpdate = false){
+        return MyDB::query("UPDATE user SET is_update = ? WHERE id = ?", [$isUpdate, $id]);
+    }
+
 }

@@ -214,6 +214,8 @@ class AttackEvent
 
         }
         $this->save();
+        User::setUpdate($this->idAttacker);
+        User::setUpdate($this->idDefender);
     }
 
     public function getNbCannonLossAttacker()

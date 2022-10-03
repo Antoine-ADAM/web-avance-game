@@ -32,6 +32,9 @@ switch ($_GET['page']){
     case Pages::MESSAGE:
         message();
         break;
+    case Pages::IS_UPDATE:
+        isUpdate();
+        break;
     default:
         Pages::redirect(Pages::HOME);
         break;

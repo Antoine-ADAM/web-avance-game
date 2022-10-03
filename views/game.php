@@ -20,6 +20,10 @@
   </div>
 </nav>
 
+<div class="alert alert-info" style="display: none" id="isUpdate">
+    An event has just occurred, refresh the page to see it !
+</div>
+
 <div id="info">
     <div class="container row">
         <ul class="col-3">
@@ -230,6 +234,19 @@
     }
     ?>
 </table> -->
-
+<script type="application/javascript">
+    const id = setInterval(check, 2000);
+    function check() {
+        fetch('<?= Pages::toURL(Pages::IS_UPDATE) ?>')
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === "noUpdate") {
+                    document.getElementById("isUpdate").style.display = "block";
+                    clearInterval(id);
+                    alert("An event has just occurred, refresh the page to see it !");
+                }
+            });
+    }
+</script>
 </body>
 </html>

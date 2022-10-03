@@ -78,7 +78,7 @@ class Message
     {
         $res = MyDB::query("INSERT INTO messages (id_sender, type, content) VALUES (?, ?, ?)", [$this->id_sender, $this->type, $this->content]);
 
-        return $res->num_rows > 0;
+        return true;
     }
 
     static function getMessagesForUser($id_user): array

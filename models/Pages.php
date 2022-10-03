@@ -14,6 +14,7 @@ class Pages
     const LEVEL_UP = "levelUp";
     const ATTACK = "attack";
     const MESSAGE = "message";
+    const IS_UPDATE = "isUpdate";
 
 
     static function toURL($page, $params = [])

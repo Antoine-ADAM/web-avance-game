@@ -11,10 +11,11 @@ function init(){
     session_start();
     if (isset($_SESSION["id"])){
         $user = User::getUserById($_SESSION["id"]);
-        if ($user != null){
+        if ($user != null && $_GET["page"] != Pages::IS_UPDATE){
             User::updateNbIndustryAll();
             AttackEvent::updateEvent();
             $_SESSION["user"] = $user;
+            User::setUpdate($_SESSION["id"], true);
         }
     }
 }
@@ -124,6 +125,7 @@ function attack(){
         Alert::pushAlert("Attack successful", Alert::SUCCESS);
         Message::pushMessage($idDefender, Message::TYPE_PERSONAL_NOTIFICATION, "You have been attacked by ".$user->getName()." ! with ".$nbCannon." cannons, ".$nbOffensiveTroop." offensive troops and ".$nbLogisticTroop." logistic troops");
         Message::pushMessage($user->getId(), Message::TYPE_PERSONAL_NOTIFICATION, "You have attacked ".$idDefender." ! with ".$nbCannon." cannons, ".$nbOffensiveTroop." offensive troops and ".$nbLogisticTroop." logistic troops");
+        User::setUpdate($idDefender, true);
         Pages::redirect(Pages::GAME);
     }
     Alert::pushAlert("Error while attacking (you didn't have enough resources)", Alert::ERROR);
@@ -142,6 +144,16 @@ function message(){
         Alert::pushAlert("Message sent", Alert::SUCCESS);
         Pages::redirect(Pages::GAME);
     }
+}
+
+function isUpdate(){
+    if(!isLogged())
+        Pages::returnJSON(["status" => "error", "message" => "You are not logged"]);
+    if (User::isUpdate($_SESSION["id"])){
+        Pages::returnJSON(["status" => "update", "message" => ""]);
+    }
+    Pages::returnJSON(["status" => "noUpdate", "message" => ""]);
+
 }
 
 

@@ -17,7 +17,8 @@ CREATE TABLE IF NOT EXISTS user (
             nbCannon BIGINT UNSIGNED NOT NULL,
             nbOffensiveTroop BIGINT UNSIGNED NOT NULL,
             nbLogisticTroop BIGINT UNSIGNED NOT NULL,
-            last_update DATETIME default NOW() NOT NULL
+            last_update DATETIME default NOW() NOT NULL,
+            is_update BOOLEAN default TRUE not null
         );
 
 create table last_update

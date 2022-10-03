@@ -30,6 +30,8 @@ class MyDB{
         "integer" => "i",
         "double" => "d",
         "date" => "s",
+        "bool" => "i",
+        "boolean" => "i"
     ];
 
     /**
