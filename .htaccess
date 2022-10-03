@@ -1,0 +1,30 @@
+#---------------#
+# Configuration #
+#---------------#
+
+# Server must follow symlinks
+Options +FollowSymlinks
+
+# Activation of the URL rewrite module
+RewriteEngine on
+
+#-------------#
+# URL Rewrite #
+#-------------#
+
+RewriteRule ^home$ index.php?page=home [L]
+RewriteRule ^game$ index.php?page=game [L]
+
+RewriteRule ^login$ index.php?page=login [L]
+RewriteRule ^register$ index.php?page=register [L]
+RewriteRule ^logout$ index.php?page=logout [L]
+RewriteRule ^purchase$ index.php?page=purchase [L]
+RewriteRule ^levelUp$ index.php?page=levelUp [L]
+RewriteRule ^attack$ index.php?page=attack [L]
+
+#-------#
+# Rules #
+#-------#
+
+# Forbid listing
+Options -Indexes
