@@ -19,7 +19,7 @@ class Pages
 
     static function toURL($page, $params = [])
     {
-        $url = "$page";
+        $url = "index.php?page=$page";
         foreach ($params as $key => $value) {
             $url .= "&$key=$value";
         }
