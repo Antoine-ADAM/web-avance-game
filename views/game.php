@@ -8,7 +8,7 @@
 </head>
 <body>
 
-<nav class="navbar navbar-dark bg-dark">
+<nav class="navbar navbar-dark bg-dark fixed-top">
   <div class="container-fluid">
     <span class="navbar-text">
       <?= $user->getName(); ?>
@@ -113,8 +113,7 @@
        title="<?=$userDot->getName()?>&#13;
        x: <?=$userDot->getX()?> y: <?=$userDot->getY()?>&#13;
        <?=$userDot->getLevelIndustry()?>🏭 <?=$userDot->getLevelEnergy()?>☢️&#13;
-       <?=$userDot->getNbCannon()?>💣 <?=$userDot->getNbOffensiveTroop()?>💪&#13;
-       <?=$userDot->getNbLogisticTroop()?>🛡️">
+       <?=$userDot->getNbCannon()?>💣 <?=$userDot->getNbOffensiveTroop()?>💪 <?=$userDot->getNbLogisticTroop()?>🛡️">
     </div>
   <?php endforeach; ?>
 </div>
@@ -125,7 +124,7 @@
     <?php
     $attackCountTmp = 0;
     foreach ($attackEvents as $attackEvent) {
-        if($attackEvent->getIdAttacker() == $user->getId()){
+        if($attackEvent->getIdAttacker() == $user->getId() AND $attackEvent->getStatus() == 0){
             echo "To: ".$attackEvent->getIdDefender();
             echo " ".$attackEvent->getStatus();
             $attackCountTmp++;
@@ -141,9 +140,8 @@
     <?php
     $attackCountTmp = 0;
     foreach ($attackEvents as $attackEvent) {
-        if($attackEvent->getIdDefender() == $user->getId()){
+        if($attackEvent->getIdDefender() == $user->getId() AND $attackEvent->getStatus() == 0){
             echo "From: ".$attackEvent->getIdAttacker();
-            echo " ".$attackEvent->getStatus();
         }
     }
     if($attackCountTmp==0){
@@ -160,19 +158,37 @@
             }
             ?>
         </select>
-        <input type="number" name="nbCannon" placeholder="Cannon amount" class="form-control mt-2" required>
-        <input type="number" name="nbOffensiveTroop" placeholder="Offensive Troop amount" class="form-control mt-2" required>
-        <input type="number" name="nbLogisticTroop" placeholder="Logistic Troop amount" class="form-control mt-2" required>
+        <input type="number" name="nbCannon" placeholder="💣" class="form-control mt-2" required>
+        <input type="number" name="nbOffensiveTroop" placeholder="💪" class="form-control mt-2" required>
+        <input type="number" name="nbLogisticTroop" placeholder="🛡️" class="form-control mt-2" required>
         <input type="submit" value="Attack" class="btn btn-outline-secondary mt-2">
     </form>
     <hr>
-      <div class="bg-light px-0 border border-dark" style="height: 150px;">
+      <div class="bg-light px-0 border border-dark" style="height: 125px;">
         <div class="overflow-auto h-100">
-          <div class="">01:22:44<p>Vous avez attaqué Lui</p></div><hr>
-          <div class="">01:22:44<p>Vous avez attaqué Lui</p></div><hr>
-          <div class="">01:22:44<p>Vous avez attaqué Lui</p></div><hr>
-          <div class="">01:22:44<p>Vous avez attaqué Lui</p></div>
+          <?php
+            foreach($messages as $msg){
+                if($msg->getType() == 0){
+                    ?><div class="bg-white"><?php
+                    echo '<u>'.$msg->getDate().'</u><br>';
+                    echo $msg->getIdSender().': ';
+                    echo $msg->getContent().'<hr class="mb-0" style="border-top: 2px solid #000000;">';
+                    ?></div><?php
+                }else if($msg->getType() == 1){
+                    ?><div style="background-color: #f2f2f2;"><?php
+                    echo '<u>'.$msg->getDate().'</u><br>';
+                    echo $msg->getContent().'<hr class="mb-0" style="border-top: 2px solid #000000;">';
+                    ?></div><?php
+                }
+            }
+          ?>
         </div>
+      </div>
+      <div class="mt-2">
+          <form action="<?= Pages::toURL(Pages::MESSAGE) ?>" method="post">
+              <textarea style="max-width: 165px;max-height: 50px;" type="text" name="message"></textarea>
+              <input type="submit" value="Send message" class="btn btn-outline-secondary">
+          </form>
       </div>
   </div>
 </div>
@@ -215,25 +231,6 @@
 </table> -->
 
 <!-- <table>
-    <tr>
-        <th>id</th>
-        <th>idAttacker</th>
-        <th>idDefender</th>
-        <th>finalDateTime</th>
-        <th>startDateTime</th>
-        <th>nbCannon</th>
-        <th>nbOffensiveTroop</th>
-        <th>nbLogisticTroop</th>
-        <th>status</th>
-        <th>nbCannonLossAttacker</th>
-        <th>nbOffensiveTroopLossAttacker</th>
-        <th>nbLogisticTroopLossAttacker</th>
-        <th>nbIndustrySteal</th>
-        <th>nbCannonLossDefender</th>
-        <th>nbOffensiveTroopLossDefender</th>
-        <th>nbLogisticTroopLossDefender</th>
-        <th>actualPosition</th>
-    </tr>
     <?php
     foreach ($attackEvents as $attackEvent) {
         echo "<tr>";
