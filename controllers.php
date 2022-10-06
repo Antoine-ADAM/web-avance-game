@@ -11,7 +11,7 @@ function init(){
     session_start();
     if (isset($_SESSION["id"])){
         $user = User::getUserById($_SESSION["id"]);
-        if ($user != null && $_GET["page"] != Pages::IS_UPDATE){
+        if ($user != null && (!isset($_GET["page"]) || $_GET["page"] != Pages::IS_UPDATE)){
             User::updateNbIndustryAll();
             AttackEvent::updateEvent();
             $_SESSION["user"] = $user;

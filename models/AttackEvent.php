@@ -187,6 +187,8 @@ class AttackEvent
                 $userDefender->setNbOffensiveTroop($nbOffensiveTroopDefender);
                 $userDefender->setNbLogisticTroop($nbLogisticTroopDefender);
                 $userDefender->save();
+                $userAttacker = new User();
+                $userAttacker->loadFromId($this->idAttacker);
                 Message::pushMessage($this->idAttacker, Message::TYPE_PERSONAL_NOTIFICATION, "You have lost the attack against " . $userDefender->getName() . " ! You have lost " . $this->nbCannonLossAttacker . " cannon, " . $this->nbOffensiveTroopLossAttacker . " offensive troop and " . $this->nbLogisticTroopLossAttacker . " logistic troop.");
                 Message::pushMessage($this->idDefender, Message::TYPE_PERSONAL_NOTIFICATION, "You have won the attack against " . $userAttacker->getName() . " ! You have lost " . $this->nbCannonLossDefender . " cannon, " . $this->nbOffensiveTroopLossDefender . " offensive troop and " . $this->nbLogisticTroopLossDefender . " logistic troop.");
             }elseif ($step <= 0) {
