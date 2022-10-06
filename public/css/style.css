@@ -1,25 +1,25 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@200;300;400;500;600;700&display=swap');
 body{
-  background-color: gray;
+  background-color: #f0fcfc;
   font-family: 'Roboto',sans-serif;
 }
 #info{
    z-index: 1;
-   border: 1px solid black;
+   /*border: 1px solid black;*/
    width: 1500px;
-   height: 100px;
+   height: 102px;
    position: fixed;
    left: calc((100% - 1500px) / 2);
-   top: 65px;
-   background-color: white;
+   top: 62px;
+   background-color: #f0fcfc;
 }
 #screen-left{
   position: absolute;
   top: 165px;
   left: calc((100% - 1900px) / 2);
   position: fixed;
-  background-color: white;
-  border: 1px solid blue;
+  background-color: #f0fcfc;
+  /*border: 1px solid blue;*/
   width: 200px;
   /*height: 500px;*/
 }
@@ -27,8 +27,9 @@ body{
   position: absolute;
   top: 165px;
   left: calc((100% - 1500px) / 2);
-  background-color: white;
-  border: 5px solid black;
+  background: url('https://c1.staticflickr.com/5/4238/35065465882_43f648365e_o.png');
+  /*background-color: white;*/
+  border: 1px solid black;
   width: 1500px;
   height: 1500px;
 }
@@ -37,14 +38,14 @@ body{
   top: 165px;
   right: calc((100% - 1900px) / 2);
   position: fixed;
-  background-color: white;
-  border: 1px solid green;
+  background-color: #f0fcfc;
+  /*border: 1px solid green;*/
   width: 200px;
   /*height: 500px;*/
 }
 .player_dot{
   position: absolute;
-  border-radius: 1px;
+  border-radius: 5px;
   box-shadow:
     0px 0px 10px black,
     0px 0px 10px black,
@@ -52,6 +53,6 @@ body{
     0px 0px 10px black,
     0px 0px 10px black
   ;
-  width: 3px;
-  height: 3px;
+  width: 5px;
+  height: 5px;
 }
