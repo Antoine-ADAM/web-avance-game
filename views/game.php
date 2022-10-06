@@ -186,8 +186,8 @@
       </div>
       <div class="mt-2">
           <form action="<?= Pages::toURL(Pages::MESSAGE) ?>" method="post">
-              <textarea style="max-width: 165px;max-height: 50px;" type="text" name="message"></textarea>
-              <input type="submit" value="Send message" class="btn btn-outline-secondary">
+              <input style="max-width: 165px;max-height: 50px;" type="text" name="message" class="form-control">
+              <input type="submit" value="Send message" class="btn btn-outline-secondary mt-2">
           </form>
       </div>
   </div>

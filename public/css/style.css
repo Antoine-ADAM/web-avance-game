@@ -27,8 +27,8 @@ body{
   position: absolute;
   top: 165px;
   left: calc((100% - 1500px) / 2);
-  /*background: url('https://previews.123rf.com/images/seamartini/seamartini1306/seamartini130600029/20325218-carte-de-banlieue-ou-petite-ville-de-vraie-conception-de-l-industrie-immobili%C3%A8re.jpg');*/
-  background-color: white;
+  background: url('https://c1.staticflickr.com/5/4238/35065465882_43f648365e_o.png');
+  /*background-color: white;*/
   border: 1px solid black;
   width: 1500px;
   height: 1500px;
