@@ -144,6 +144,8 @@ function message(){
         Alert::pushAlert("Message sent", Alert::SUCCESS);
         Pages::redirect(Pages::GAME);
     }
+    Alert::pushAlert("Error while sending message (0<length<255)", Alert::ERROR);
+    Pages::redirect(Pages::GAME);
 }
 
 function isUpdate(){
