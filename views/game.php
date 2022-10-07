@@ -125,7 +125,7 @@
     $attackCountTmp = 0;
     foreach ($attackEvents as $attackEvent) {
         if($attackEvent->getIdAttacker() == $user->getId() AND $attackEvent->getStatus() == 0){
-            echo "To: ".$attackEvent->getIdDefender();
+            echo "To: ".$usersById[$attackEvent->getIdDefender()]->getName();
             echo " ".$attackEvent->getStatus();
             $attackCountTmp++;
         }
@@ -141,7 +141,7 @@
     $attackCountTmp = 0;
     foreach ($attackEvents as $attackEvent) {
         if($attackEvent->getIdDefender() == $user->getId() AND $attackEvent->getStatus() == 0){
-            echo "From: ".$attackEvent->getIdAttacker();
+            echo "From: ".$usersById[$attackEvent->getIdAttacker()]->getName();
         }
     }
     if($attackCountTmp==0){
@@ -171,7 +171,7 @@
                 if($msg->getType() == 0){
                     ?><div class="bg-white"><?php
                     echo '<u>'.$msg->getDate().'</u><br>';
-                    echo $msg->getIdSender().': ';
+                    echo $usersById[$msg->getIdSender()]->getName().': ';
                     echo $msg->getContent().'<hr class="mb-0" style="border-top: 2px solid #000000;">';
                     ?></div><?php
                 }else if($msg->getType() == 1){
