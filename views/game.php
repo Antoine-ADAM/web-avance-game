@@ -108,6 +108,7 @@
 <div id="screen">
   <?php foreach ($users as $userDot): ?>
     <div
+            onmouseover="infoPlayer(<?= $userDot->getId() ?>)"
        class="player_dot"
        style="top: <?=$userDot->getY() * 3; ?>px; left: <?=$userDot->getX() * 3; ?>px; background-color: <?=$userDot->getColor(); ?>;"
        title="<?=$userDot->getName()?>&#13;
@@ -115,8 +116,65 @@
        <?=$userDot->getLevelIndustry()?>🏭 <?=$userDot->getLevelEnergy()?>☢️&#13;
        <?=$userDot->getNbCannon()?>💣 <?=$userDot->getNbOffensiveTroop()?>💪 <?=$userDot->getNbLogisticTroop()?>🛡️">
     </div>
+  <div id="playerInfo<?= $userDot->getId() ?>" style="display: none;position: relative;top: <?=$userDot->getY() * 3+15; ?>px; left: <?=$userDot->getX() * 3+15; ?>px; border: solid 3px; border-color: <?=$userDot->getColor(); ?>;width: fit-content; padding: 10px; background-color: aliceblue; border-radius: 5px ">
+    <div class="playerInfo">
+      <div class="playerInfoName">
+        <?=$userDot->getName()?>
+      </div>
+      <div class="playerInfoLevel">
+        <?=$userDot->getLevelIndustry()?>🏭 <?=$userDot->getLevelEnergy()?>☢️
+      </div>
+      <div class="playerInfoTroop">
+        <?=$userDot->getNbCannon()?>💣 <?=$userDot->getNbOffensiveTroop()?>💪 <?=$userDot->getNbLogisticTroop()?>🛡️
+      </div>
+    </div>
+  </div>
   <?php endforeach; ?>
 </div>
+
+<script type="application/javascript">
+    let user = {
+        id: <?= $user->getId() ?>,
+        x: <?= $user->getX() ?>,
+        y: <?= $user->getY() ?>,
+        color: "<?= $user->getColor() ?>",
+        name: "<?= $user->getName() ?>",
+        levelIndustry: <?= $user->getLevelIndustry() ?>,
+        levelEnergy: <?= $user->getLevelEnergy() ?>,
+        nbCannon: <?= $user->getNbCannon() ?>,
+        nbOffensiveTroop: <?= $user->getNbOffensiveTroop() ?>,
+        nbLogisticTroop: <?= $user->getNbLogisticTroop() ?>,
+        nbIndustry: <?= $user->getNbIndustry() ?>,
+        nbEnergy: <?= $user->getNbEnergy() ?>,
+        costLevelUpIndustry: <?= json_encode($user->getCostLevelUpIndustry()) ?>,
+        costLevelUpEnergy: <?= json_encode($user->getCostLevelUpEnergy()) ?>,
+    };
+    let users = [
+        <?php foreach ($users as $user): ?>
+        {
+            id: <?= $user->getId() ?>,
+            x: <?= $user->getX() ?>,
+            y: <?= $user->getY() ?>,
+            color: "<?= $user->getColor() ?>",
+            name: "<?= $user->getName() ?>",
+            levelIndustry: <?= $user->getLevelIndustry() ?>,
+            levelEnergy: <?= $user->getLevelEnergy() ?>,
+            nbCannon: <?= $user->getNbCannon() ?>,
+            nbOffensiveTroop: <?= $user->getNbOffensiveTroop() ?>,
+            nbLogisticTroop: <?= $user->getNbLogisticTroop() ?>,
+        },
+        <?php endforeach; ?>
+    ];
+    function infoPlayer(id){
+        document.getElementById("playerInfo"+id).style.display = "block";
+        for (let i = 0; i < users.length; i++) {
+            if(users[i].id !== id){
+                document.getElementById("playerInfo"+users[i].id).style.display = "none";
+            }
+        }
+
+    }
+</script>
 
 <div id="screen-right" class="container p-3">
 
