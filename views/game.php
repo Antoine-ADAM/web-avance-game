@@ -55,19 +55,19 @@
     <form action="<?= Pages::toURL(Pages::PURCHASE) ?>" method="post">
         <label class="mt-2">15🔧 2⚡</label>
         <input type="hidden" name="type" value="cannon">
-        <input type="number" name="nb" value="0" class="form-control">
+        <input type="number" name="nb" min="0" max="1999999999" value="1" class="form-control">
         <input type="submit" value="Buy cannon" class="btn btn-outline-secondary mt-2">
     </form>
     <form action="<?= Pages::toURL(Pages::PURCHASE) ?>" method="post">
         <label class="mt-2">10🔧 0⚡</label>
         <input type="hidden" name="type" value="offensiveTroop">
-        <input type="number" name="nb" value="0" class="form-control">
+        <input type="number" name="nb" min="0" max="1999999999" value="1" class="form-control">
         <input type="submit" value="Buy offensive troop" class="btn btn-outline-secondary mt-2">
     </form>
     <form action="<?= Pages::toURL(Pages::PURCHASE) ?>" method="post">
         <label class="mt-2">10🔧 0⚡</label>
         <input type="hidden" name="type" value="logisticTroop">
-        <input type="number" name="nb" value="0" class="form-control">
+        <input type="number" min="0" max="1999999999" name="nb" value="1" class="form-control">
         <input type="submit" value="Buy logistic troop" class="btn btn-outline-secondary mt-2">
     </form>
     <hr>
@@ -160,9 +160,9 @@
             }
             ?>
         </select>
-        <input type="number" name="nbCannon" placeholder="💣" class="form-control mt-2" required>
-        <input type="number" name="nbOffensiveTroop" placeholder="💪" class="form-control mt-2" required>
-        <input type="number" name="nbLogisticTroop" placeholder="🛡️" class="form-control mt-2" required>
+        <input type="number" name="nbCannon" min="0" max="1999999999" placeholder="💣" class="form-control mt-2" required>
+        <input type="number" name="nbOffensiveTroop" min="0" max="1999999999" placeholder="💪" class="form-control mt-2" required>
+        <input type="number" name="nbLogisticTroop" min="0" max="1999999999" placeholder="🛡️" class="form-control mt-2" required>
         <input type="submit" value="Attack" class="btn btn-outline-secondary mt-2">
     </form>
     <hr>
