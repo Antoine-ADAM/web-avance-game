@@ -153,8 +153,10 @@
     <form action="<?= Pages::toURL(Pages::ATTACK) ?>" method="post">
         <select name="idDefender" class="mt-2">
             <?php
-            foreach ($users as $user){
-                echo "<option value=\"".$user->getId()."\">".$user->getName()."</option>";
+            foreach ($users as $u){
+                if($user->getId() != $u->getId()){
+                    echo "<option value=\"".$u->getId()."\">".$u->getName()."</option>";
+                }
             }
             ?>
         </select>
