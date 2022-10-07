@@ -171,5 +171,9 @@ function game(){
     $users = User::getAllUsers();
     $attackEvents = AttackEvent::getAttackEventByUserId($user->getId());
     $messages = Message::getMessagesForUser($user->getId());
-    Pages::render("game.php", ["user" => $user, "users" => $users, "attackEvents" => $attackEvents, "messages" => $messages]);
+    $usersById = [];
+    foreach ($users as $u){
+        $usersById[$u->getId()] = $u;
+    }
+    Pages::render("game.php", ["user" => $user, "users" => $users, "attackEvents" => $attackEvents, "messages" => $messages, "usersById" => $usersById]);
 }
