@@ -130,6 +130,16 @@
     </div>
   </div>
   <?php endforeach; ?>
+    <?php foreach ($attackEvents as $a){
+        if ($a->getStatus() == 0){
+        ?>
+    <div style="transform: translate(-50%, -50%) rotate(90deg);height: 90px;width: 110px;">
+        <div style="position: absolute;background-color: aqua;border-radius: 110px;top: 10px;left: 10px;bottom: 10px;right: 10px;opacity: 0.3;box-shadow: 0 0 30px 30px cyan"></div>
+        <img src="public/img/fourmis.gif" alt="" height="60px" style="position: absolute;top: 30px;left: 0">
+        <img src="public/img/fourmis.gif" alt="" height="60px" style="position: absolute;top: 0;left:30px">
+        <img src="public/img/fourmis.gif" alt="" height="60px" style="position: absolute;top: 30px;left:60px">
+    </div>
+    <?php }} ?>
 </div>
 
 <script type="application/javascript">
