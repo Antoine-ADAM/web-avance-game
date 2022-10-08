@@ -33,7 +33,7 @@
         <ul class="col">
             <li>Canoon amount: <?= $user->getNbCannon() ?>💣</li>
             <li>Offensive troop amount: <?= $user->getNbOffensiveTroop() ?>💪</li>
-            <li>Logistic troop amount: <?= $user->getNbLogisticTroop() ?>🛡️</li>
+            <li>Logistic troop amount: <?= $user->getNbLogisticTroop() ?>🚚</li>
         </ul>
         <ul class="col">
             <li>Industry amount: <?= $user->getNbIndustry() ?>🔧</li>
@@ -114,7 +114,7 @@
        title="<?=$userDot->getName()?>&#13;
        x: <?=$userDot->getX()?> y: <?=$userDot->getY()?>&#13;
        <?=$userDot->getLevelIndustry()?>🏭 <?=$userDot->getLevelEnergy()?>☢️&#13;
-       <?=$userDot->getNbCannon()?>💣 <?=$userDot->getNbOffensiveTroop()?>💪 <?=$userDot->getNbLogisticTroop()?>🛡️">
+       <?=$userDot->getNbCannon()?>💣 <?=$userDot->getNbOffensiveTroop()?>💪 <?=$userDot->getNbLogisticTroop()?>🚚">
     </div>
   <div id="playerInfo<?= $userDot->getId() ?>" style="display: none;position: relative;top: <?=$userDot->getY() * 3+15; ?>px; left: <?=$userDot->getX() * 3+15; ?>px; border: solid 3px; border-color: <?=$userDot->getColor(); ?>;width: fit-content; padding: 10px; background-color: aliceblue; border-radius: 5px ">
     <div class="playerInfo">
@@ -125,7 +125,7 @@
         <?=$userDot->getLevelIndustry()?>🏭 <?=$userDot->getLevelEnergy()?>☢️
       </div>
       <div class="playerInfoTroop">
-        <?=$userDot->getNbCannon()?>💣 <?=$userDot->getNbOffensiveTroop()?>💪 <?=$userDot->getNbLogisticTroop()?>🛡️
+        <?=$userDot->getNbCannon()?>💣 <?=$userDot->getNbOffensiveTroop()?>💪 <?=$userDot->getNbLogisticTroop()?>🚚
       </div>
     </div>
   </div>
@@ -160,18 +160,18 @@
         costLevelUpEnergy: <?= json_encode($user->getCostLevelUpEnergy()) ?>,
     };
     let users = [
-        <?php foreach ($users as $user): ?>
+        <?php foreach ($users as $u): ?>
         {
-            id: <?= $user->getId() ?>,
-            x: <?= $user->getX() ?>,
-            y: <?= $user->getY() ?>,
-            color: "<?= $user->getColor() ?>",
-            name: "<?= $user->getName() ?>",
-            levelIndustry: <?= $user->getLevelIndustry() ?>,
-            levelEnergy: <?= $user->getLevelEnergy() ?>,
-            nbCannon: <?= $user->getNbCannon() ?>,
-            nbOffensiveTroop: <?= $user->getNbOffensiveTroop() ?>,
-            nbLogisticTroop: <?= $user->getNbLogisticTroop() ?>,
+            id: <?= $u->getId() ?>,
+            x: <?= $u->getX() ?>,
+            y: <?= $u->getY() ?>,
+            color: "<?= $u->getColor() ?>",
+            name: "<?= $u->getName() ?>",
+            levelIndustry: <?= $u->getLevelIndustry() ?>,
+            levelEnergy: <?= $u->getLevelEnergy() ?>,
+            nbCannon: <?= $u->getNbCannon() ?>,
+            nbOffensiveTroop: <?= $u->getNbOffensiveTroop() ?>,
+            nbLogisticTroop: <?= $u->getNbLogisticTroop() ?>,
         },
         <?php endforeach; ?>
     ];
@@ -228,9 +228,19 @@
             }
             ?>
         </select>
-        <input type="number" name="nbCannon" min="0" max="1999999999" placeholder="💣" class="form-control mt-2" required>
-        <input type="number" name="nbOffensiveTroop" min="0" max="1999999999" placeholder="💪" class="form-control mt-2" required>
-        <input type="number" name="nbLogisticTroop" min="0" max="1999999999" placeholder="🛡️" class="form-control mt-2" required>
+        <div class="input-group mt-2">
+            <span class="input-group-text" id="label_attack_a">💣</span>
+            <input type="number" name="nbCannon" min="0" max="1999999999" value="1" class="form-control" required>
+        </div>
+        <div class="input-group mt-2">
+            <span class="input-group-text" id="label_attack_b">💪</span>
+            <input type="number" name="nbOffensiveTroop" min="0" max="1999999999" value="1" class="form-control" required>
+        </div>
+        <div class="input-group mt-2">
+            <span class="input-group-text" id="label_attack_b">🚚</span>
+            <input type="number" name="nbLogisticTroop" min="0" max="1999999999" value="1" class="form-control" required>
+        </div>
+        
         <input type="submit" value="Attack" class="btn btn-outline-secondary mt-2">
     </form>
     <hr>
