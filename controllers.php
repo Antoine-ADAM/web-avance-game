@@ -124,7 +124,7 @@ function attack(){
         $user->attack(intval($idDefender), intval($nbCannon), intval($nbOffensiveTroop), intval($nbLogisticTroop)) && $user->save()){
         Alert::pushAlert("Attack successful", Alert::SUCCESS);
         Message::pushMessage($idDefender, Message::TYPE_PERSONAL_NOTIFICATION, "You have been attacked by ".$user->getName()." ! with ".$nbCannon." cannons, ".$nbOffensiveTroop." offensive troops and ".$nbLogisticTroop." logistic troops");
-        Message::pushMessage($user->getId(), Message::TYPE_PERSONAL_NOTIFICATION, "You have attacked ".$idDefender." ! with ".$nbCannon." cannons, ".$nbOffensiveTroop." offensive troops and ".$nbLogisticTroop." logistic troops");
+        Message::pushMessage($user->getId(), Message::TYPE_PERSONAL_NOTIFICATION, "You have attacked ".User::getUserById($idDefender)->getName()." ! with ".$nbCannon." cannons, ".$nbOffensiveTroop." offensive troops and ".$nbLogisticTroop." logistic troops");
         User::setUpdate($idDefender, true);
         Pages::redirect(Pages::GAME);
     }

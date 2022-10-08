@@ -352,6 +352,14 @@ class AttackEvent
         return $this->attackerY;
     }
 
+    public function getAttackerId(){
+        return $this->idAttacker;
+    }
+
+    public function getDefenderId(){
+        return $this->idDefender;
+    }
+
     public function actualPosition(){
         if($this->status != 0)
             return false;
@@ -362,6 +370,35 @@ class AttackEvent
         $ratio = $actual / $total;
         $x = $this->attackerX + ($this->defenderX - $this->attackerX) * $ratio;
         $y = $this->attackerY + ($this->defenderY - $this->attackerY) * $ratio;
+        return [$x, $y];
+    }
+
+    public function getAngle(){
+        if($this->status != 0)
+            return false;
+        $start = (new DateTime($this->startDateTime))->getTimestamp();
+        $final = (new DateTime($this->finalDateTime))->getTimestamp();
+        $actual = (new DateTime())->getTimestamp() - $start;
+        $total = $final - $start;
+        $ratio = $actual / $total;
+        $x = $this->attackerX + ($this->defenderX - $this->attackerX) * $ratio;
+        $y = $this->attackerY + ($this->defenderY - $this->attackerY) * $ratio;
+        $angle = 360 - atan2($this->attackerY - $y, $this->attackerX - $x) * 180 / pi();
+        return $angle;
+    }
+
+    public function getMovementPerSecond(){
+        // return x add per second, y add per second, (speed 5px/s)
+        $start = (new DateTime($this->startDateTime))->getTimestamp();
+        $final = (new DateTime($this->finalDateTime))->getTimestamp();
+        $actual = (new DateTime())->getTimestamp() - $start;
+        $total = $final - $start;
+        $ratio = $actual / $total;
+        $x = $this->attackerX + ($this->defenderX - $this->attackerX) * $ratio;
+        $y = $this->attackerY + ($this->defenderY - $this->attackerY) * $ratio;
+        $angle = 360 - atan2($this->attackerY - $y, $this->attackerX - $x) * 180 / pi();
+        $x = cos($angle * pi() / 180) * 5;
+        $y = sin($angle * pi() / 180) * 5;
         return [$x, $y];
     }
 

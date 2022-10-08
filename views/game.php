@@ -132,9 +132,10 @@
   <?php endforeach; ?>
     <?php foreach ($attackEvents as $a){
         if ($a->getStatus() == 0){
+            $color = $usersById[$a->getAttackerId()]->getColor();
         ?>
-    <div style="transform: translate(-50%, -50%) rotate(90deg);height: 90px;width: 110px;">
-        <div style="position: absolute;background-color: aqua;border-radius: 110px;top: 10px;left: 10px;bottom: 10px;right: 10px;opacity: 0.3;box-shadow: 0 0 30px 30px cyan"></div>
+    <div id="attack-<?= $a->getId() ?>" style="position: absolute; top: <?= $a->actualPosition()[0]*3?>px;left: <?= $a->actualPosition()[1]*3?>px;transform: translate(-50%, -50%) rotate(<?= $a->getAngle() ?>deg);height: 90px;width: 110px;">
+        <div style="position: absolute;background-color: <?= $color ?>;border-radius: 110px;top: 10px;left: 10px;bottom: 10px;right: 10px;opacity: 0.3;box-shadow: 0 0 30px 30px <?= $color ?>"></div>
         <img src="public/img/fourmis.gif" alt="" height="60px" style="position: absolute;top: 30px;left: 0">
         <img src="public/img/fourmis.gif" alt="" height="60px" style="position: absolute;top: 0;left:30px">
         <img src="public/img/fourmis.gif" alt="" height="60px" style="position: absolute;top: 30px;left:60px">
@@ -143,6 +144,7 @@
 </div>
 
 <script type="application/javascript">
+    console.log("test");
     let user = {
         id: <?= $user->getId() ?>,
         x: <?= $user->getX() ?>,
@@ -184,6 +186,39 @@
         }
 
     }
+    let attacks = [
+        <?php foreach ($attackEvents as $a) {
+            if ($a->getStatus() == 0) {
+                echo '{';
+                echo 'id: ' . $a->getId() . ',';
+                echo 'startDate: Date.parse("' . $a->getStartDateTime()->format(DateTime::ATOM) . '"),';
+                echo 'finalDate: Date.parse("' . $a->getFinalDateTime()->format(DateTime::ATOM) . '"),';
+                echo 'moveX: ' . $a->getMovementPerSecond()[0] . ',';
+                echo 'moveY: ' . $a->getMovementPerSecond()[1] . ',';
+                echo '},';
+            }
+        }?>
+    ];
+    console.log(attacks);
+    function update() {
+        console.log("update");
+        for(let i = 0; i < attacks.length; i++){
+            let dom = document.getElementById("attack-"+attacks[i].id);
+            let xLeft = parseFloat(dom.style.left);
+            let yTop = parseFloat(dom.style.top);
+            dom.style.left = xLeft + attacks[i].moveX + "px";
+            dom.style.top = yTop + attacks[i].moveY + "px";
+            console.log(xLeft);
+            console.log(yTop);
+        }
+    }
+    setInterval(update, 1000);
+
+    function scrollbarPos(){
+        var messageBody = document.getElementById("messages");
+        messageBody.scrollTop = messageBody.scrollHeight - messageBody.clientHeight;
+    }
+    window.onload = scrollbarPos;
 </script>
 
 <div id="screen-right" class="container p-3">
@@ -244,8 +279,8 @@
         <input type="submit" value="Attack" class="btn btn-outline-secondary mt-2">
     </form>
     <hr>
-      <div class="bg-light px-0 border border-dark" style="height: 125px;">
-        <div class="overflow-auto h-100">
+      <div class="bg-light px-0 border border-dark" style="height: 200px;">
+        <div class="overflow-auto" style="height: inherit" id="messages">
           <?php
             foreach($messages as $msg){
                 if($msg->getType() == 0){
