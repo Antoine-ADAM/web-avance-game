@@ -41,6 +41,11 @@ class User
         return $users;
     }
 
+    public static function setUpdateAll($idExclude, $value)
+    {
+        $db = MyDB::Query("UPDATE user SET is_update = ? WHERE id != ?", [$value, $idExclude]);
+    }
+
     public static function isExist($id){
         $db = MyDB::getDB();
         $stmt = $db->prepare("SELECT id FROM user WHERE id = ?");
@@ -146,12 +151,12 @@ class User
             return false;
         }
 
-        $x = rand(0, 500);
-        $y = rand(0, 500);
+        $x = rand(60, 440);
+        $y = rand(60, 440);
         $max = 20;
         while (MyDB::query("SELECT id FROM user WHERE x=? AND y=?", [$x, $y])->fetch_row() && $max > 0){
-            $x = rand(0, 500);
-            $y = rand(0, 500);
+            $x = rand(60, 440);
+            $y = rand(60, 440);
             $max--;
         }
         if($max == 0){

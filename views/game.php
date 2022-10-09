@@ -191,6 +191,9 @@
       <div class="playerInfoName">
         <?=$userDot->getName()?>
       </div>
+        <div>
+            x: <?=$userDot->getX()?> y: <?=$userDot->getY()?>
+        </div>
       <div class="playerInfoLevel">
         <?=$userDot->getLevelIndustry()?>🏭 <?=$userDot->getLevelEnergy()?>☢️
       </div>
@@ -368,13 +371,20 @@
         },
         <?php endforeach; ?>
     ];
+    let idInfoUser = null;
+    let idInfoUserTime = null;
     function infoPlayer(id){
-        document.getElementById("playerInfo"+id).style.display = "block";
-        for (let i = 0; i < users.length; i++) {
-            if(users[i].id !== id){
-                document.getElementById("playerInfo"+users[i].id).style.display = "none";
-            }
+        console.log(idInfoUserTime, idInfoUser, id);
+        if(idInfoUser!==null){
+            clearTimeout(idInfoUserTime);
+            document.getElementById("playerInfo"+idInfoUser).style.display = "none";
         }
+        document.getElementById("playerInfo"+id).style.display = "block";
+        idInfoUser = id;
+        idInfoUserTime = setTimeout(function(){
+            document.getElementById("playerInfo"+idInfoUser).style.display = "none";
+            idInfoUser = null;
+        }, 2000);
 
     }
     let attacks = [
@@ -424,11 +434,18 @@
     }
     setInterval(update, 100);
 
-    function scrollbarPos(){
+    function onload(){
         var messageBody = document.getElementById("messages");
         messageBody.scrollTop = messageBody.scrollHeight - messageBody.clientHeight;
+        // if background img is not loaded, use "/game/img/img.png"
+        let img = new Image();
+        img.src = "/game/public/img/game_background.png";
+        img.onload = function () {
+            // set body background
+            document.body.style.backgroundImage = "url('/game/public/img/game_background.png')";
+        };
     }
-    window.onload = scrollbarPos;
+    document.addEventListener("DOMContentLoaded", onload);
 
 </script>
 </body>

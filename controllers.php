@@ -128,7 +128,7 @@ function attack(){
         Alert::pushAlert("Attack successful", Alert::SUCCESS);
         Message::pushMessage($idDefender, Message::TYPE_PERSONAL_NOTIFICATION, "You have been attacked by ".$user->getName()." ! with ".$nbCannon." cannons, ".$nbOffensiveTroop." offensive troops and ".$nbLogisticTroop." logistic troops");
         Message::pushMessage($user->getId(), Message::TYPE_PERSONAL_NOTIFICATION, "You have attacked ".User::getUserById($idDefender)->getName()." ! with ".$nbCannon." cannons, ".$nbOffensiveTroop." offensive troops and ".$nbLogisticTroop." logistic troops");
-        User::setUpdate($idDefender, true);
+        User::setUpdate($idDefender);
         sleep(1);
         Pages::redirect(Pages::GAME);
     }
@@ -146,6 +146,7 @@ function message(){
     $message = $_POST["message"];
     if (Message::pushMessage($user->getId(), Message::TYPE_CHAT_ALL, $message)){
         Alert::pushAlert("Message sent", Alert::SUCCESS);
+        User::setUpdateAll($user->getId(), false);
         Pages::redirect(Pages::GAME);
     }
     Alert::pushAlert("Error while sending message (0<length<255)", Alert::ERROR);
