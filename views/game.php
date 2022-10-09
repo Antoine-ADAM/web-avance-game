@@ -340,13 +340,13 @@
             }
             let x = parseFloat(dom.style.left);
             let y = parseFloat(dom.style.top);
-            dom.style.top = (y+attacks[i].moveY/10)+"px";
-            dom.style.left = (x+attacks[i].moveX/10)+"px";
-            domInfo.style.top = (y+attacks[i].moveY/10+50)+"px";
-            domInfo.style.left = (x+attacks[i].moveX/10+27)+"px";
+            dom.style.top = (y+attacks[i].moveY)+"px";
+            dom.style.left = (x+attacks[i].moveX)+"px";
+            domInfo.style.top = (y+attacks[i].moveY+50)+"px";
+            domInfo.style.left = (x+attacks[i].moveX+27)+"px";
         }
     }
-    setInterval(update, 100);
+    setInterval(update, 1000);
 
     function scrollbarPos(){
         var messageBody = document.getElementById("messages");

@@ -64,7 +64,7 @@ class AttackEvent
             $this->attackerY = $user['y'];
         }
         $this->startDateTime = date('Y-m-d H:i:s');
-        $this->finalDateTime = date('Y-m-d H:i:s', time()+round(pow(pow($this->attackerX-$this->defenderX, 2)+pow($this->attackerY-$this->defenderY, 2), 0.5))/5);
+        $this->finalDateTime = date('Y-m-d H:i:s', time()+round(pow(pow($this->attackerX-$this->defenderX, 2)+pow($this->attackerY-$this->defenderY, 2), 0.5))*5);
         $this->status = 0;
         $res = MyDB::query("INSERT INTO attack_event (idAttacker, idDefender, finalDateTime, startDateTime, nbCannon, nbOffensiveTroop, nbLogisticTroop, status, defenderX, defenderY, attackerX, attackerY) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [$this->idAttacker, $this->idDefender, $this->finalDateTime, $this->startDateTime, $this->nbCannon, $this->nbOffensiveTroop, $this->nbLogisticTroop, $this->status, $this->defenderX, $this->defenderY, $this->attackerX, $this->attackerY]);
         return true;
@@ -397,8 +397,8 @@ class AttackEvent
         $x = $this->attackerX + ($this->defenderX - $this->attackerX) * $ratio;
         $y = $this->attackerY + ($this->defenderY - $this->attackerY) * $ratio;
         $angle = atan2($y-$this->attackerY, $x-$this->attackerX) * 180 / pi();
-        $x = cos($angle * pi() / 180)*5*3;
-        $y = sin($angle * pi() / 180)*5*3;
+        $x = cos($angle * pi() / 180)*3/5;
+        $y = sin($angle * pi() / 180)*3/5;
         return [$x, $y];
     }
 
