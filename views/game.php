@@ -258,7 +258,9 @@
         document.getElementById("isUpdate").style.display = "block";
         clearInterval(id);
         id=null;
-        alert("An event has just occurred, refresh the page to see it !");
+        if(confirm("An event has just occurred, do you want to refresh the page?")){
+            location.reload();
+        }
     }
 </script>
 
