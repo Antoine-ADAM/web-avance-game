@@ -5,6 +5,7 @@
     <title>Game</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" href="/public/css/style.css">
+    <link rel="icon" href="/public/img/fourmis.gif">
 </head>
 <body>
 <div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -180,11 +181,7 @@
     <div
             onmouseover="infoPlayer(<?= $userDot->getId() ?>)"
        class="player_dot"
-       style="top: <?=$userDot->getY() * 3; ?>px; left: <?=$userDot->getX() * 3; ?>px; background-color: <?=$userDot->getColor(); ?>;"
-       title="<?=$userDot->getName()?>&#13;
-       x: <?=$userDot->getX()?> y: <?=$userDot->getY()?>&#13;
-       <?=$userDot->getLevelIndustry()?>🏭 <?=$userDot->getLevelEnergy()?>☢️&#13;
-       <?=$userDot->getNbCannon()?>💣 <?=$userDot->getNbOffensiveTroop()?>💪 <?=$userDot->getNbLogisticTroop()?>🚚">
+       style="top: <?=$userDot->getY() * 3; ?>px; left: <?=$userDot->getX() * 3; ?>px; background-color: <?=$userDot->getColor(); ?>;">
     </div>
   <div id="playerInfo<?= $userDot->getId() ?>" style="display: none;position: relative;top: <?=$userDot->getY() * 3+15; ?>px; left: <?=$userDot->getX() * 3+15; ?>px; border: solid 3px; border-color: <?=$userDot->getColor(); ?>;width: fit-content; padding: 10px; background-color: aliceblue; border-radius: 5px ">
     <div class="playerInfo">
@@ -283,7 +280,7 @@
                     ?>
                     <div class="bg-white">
                         <u><?=$msg->getDate()?></u><br>
-                        <?=$usersById[$msg->getIdSender()]->getName()?>: <?=$msg->getContent()?>
+                        <div style="word-wrap: break-word;"><?=$usersById[$msg->getIdSender()]->getName()?>: <?=$msg->getContent()?></div>
                         <hr class="mb-0" style="border-top: 2px solid #000000;">
                     </div><?php
                 }else if($msg->getType() == 1){

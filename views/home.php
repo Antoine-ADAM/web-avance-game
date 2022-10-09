@@ -3,6 +3,7 @@
     <title>Home</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" href="/public/css/style.css">
+    <link rel="icon" href="/public/img/fourmis.gif">
 </head>
 <body style="background: url('/public/img/home_background.jpg') no-repeat;background-size: cover;">
     <nav class="navbar navbar-dark bg-dark">
@@ -57,10 +58,10 @@
     <script type="text/javascript">
         var check = function() {
           if (document.getElementById('password').value ==
-            document.getElementById('confirm_password').value) {
-            document.getElementById('message').style.color = 'green';
-            document.getElementById('message').innerHTML = 'matching';
-            return true;
+            document.getElementById('confirm_password').value && document.getElementById('password').value != "") {
+                document.getElementById('message').style.color = 'green';
+                document.getElementById('message').innerHTML = 'matching';
+                return true;
           } else {
             document.getElementById('message').style.color = 'red';
             document.getElementById('message').innerHTML = 'not matching';
