@@ -37,7 +37,8 @@
                     $i = 0;
                     foreach ($scores as $name => $score) {
                         if ($i < $max) {
-                            echo "<tr><td>#$i</td><td>$name</td><td>$score</td></tr>";
+                            $b = $i + 1;
+                            echo "<tr><td>#$b</td><td>$name</td><td>$score</td></tr>";
                         }else{
                             break;
                         }
