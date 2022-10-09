@@ -146,123 +146,7 @@
     <?php }} ?>
 </div>
 
-<script type="application/javascript">
-    console.log("test");
-    let user = {
-        id: <?= $user->getId() ?>,
-        x: <?= $user->getX() ?>,
-        y: <?= $user->getY() ?>,
-        color: "<?= $user->getColor() ?>",
-        name: "<?= $user->getName() ?>",
-        levelIndustry: <?= $user->getLevelIndustry() ?>,
-        levelEnergy: <?= $user->getLevelEnergy() ?>,
-        nbCannon: <?= $user->getNbCannon() ?>,
-        nbOffensiveTroop: <?= $user->getNbOffensiveTroop() ?>,
-        nbLogisticTroop: <?= $user->getNbLogisticTroop() ?>,
-        nbIndustry: <?= $user->getNbIndustry() ?>,
-        nbEnergy: <?= $user->getNbEnergy() ?>,
-        costLevelUpIndustry: <?= json_encode($user->getCostLevelUpIndustry()) ?>,
-        costLevelUpEnergy: <?= json_encode($user->getCostLevelUpEnergy()) ?>,
-    };
-    let users = [
-        <?php foreach ($users as $u): ?>
-        {
-            id: <?= $u->getId() ?>,
-            x: <?= $u->getX() ?>,
-            y: <?= $u->getY() ?>,
-            color: "<?= $u->getColor() ?>",
-            name: "<?= $u->getName() ?>",
-            levelIndustry: <?= $u->getLevelIndustry() ?>,
-            levelEnergy: <?= $u->getLevelEnergy() ?>,
-            nbCannon: <?= $u->getNbCannon() ?>,
-            nbOffensiveTroop: <?= $u->getNbOffensiveTroop() ?>,
-            nbLogisticTroop: <?= $u->getNbLogisticTroop() ?>,
-        },
-        <?php endforeach; ?>
-    ];
-    function infoPlayer(id){
-        document.getElementById("playerInfo"+id).style.display = "block";
-        for (let i = 0; i < users.length; i++) {
-            if(users[i].id !== id){
-                document.getElementById("playerInfo"+users[i].id).style.display = "none";
-            }
-        }
 
-    }
-    let attacks = [
-        <?php foreach ($attackEvents as $a) {
-            if ($a->getStatus() == 0) {
-                echo '{';
-                echo 'id: ' . $a->getId() . ',';
-                echo 'startDate: Date.parse("' . $a->getStartDateTime()->format(DateTime::ATOM) . '"),';
-                echo 'finalDate: Date.parse("' . $a->getFinalDateTime()->format(DateTime::ATOM) . '"),';
-                echo 'startX: ' . $a->getAttackerX() . ',';
-                echo 'startY: ' . $a->getAttackerY() . ',';
-                echo 'finalX: ' . $a->getDefenderX() . ',';
-                echo 'finalY: ' . $a->getDefenderY() . ',';
-                echo 'moveX: ' . $a->getMovementPerSecond()[0] . ',';
-                echo 'moveY: ' . $a->getMovementPerSecond()[1] . ',';
-                echo '},';
-            }
-        }?>
-    ];
-    function reProcessPos() {
-        for(let i = 0; i < attacks.length; i++){
-            let dom = document.getElementById("attack-"+attacks[i].id);
-            let x = attacks[i].startX + (attacks[i].finalX - attacks[i].startX) * (Date.now() - attacks[i].startDate) / (attacks[i].finalDate - attacks[i].startDate);
-            let y = attacks[i].startY + (attacks[i].finalY - attacks[i].startY) * (Date.now() - attacks[i].startDate) / (attacks[i].finalDate - attacks[i].startDate);
-            dom.style.top = y*3+22+"px";
-            dom.style.left = x*3+27+"px";
-        }
-    }
-    function update() {
-        for(let i = 0; i < attacks.length; i++){
-            let dom = document.getElementById("attack-"+attacks[i].id);
-            let domInfo = document.getElementById("attack-info-"+attacks[i].id);
-            if(Date.now() > attacks[i].finalDate){
-                dom.style.display = "none";
-                domInfo.style.display = "none";
-                attacks.splice(i, 1);
-                i--;
-                noUpdate();
-            }
-            let x = parseFloat(dom.style.left);
-            let y = parseFloat(dom.style.top);
-            dom.style.top = (y+attacks[i].moveY/10)+"px";
-            dom.style.left = (x+attacks[i].moveX/10)+"px";
-            domInfo.style.top = (y+attacks[i].moveY/10+50)+"px";
-            domInfo.style.left = (x+attacks[i].moveX/10+27)+"px";
-        }
-    }
-    setInterval(update, 100);
-
-    function scrollbarPos(){
-        var messageBody = document.getElementById("messages");
-        messageBody.scrollTop = messageBody.scrollHeight - messageBody.clientHeight;
-    }
-    window.onload = scrollbarPos;
-    let id = setInterval(check, 2000);
-    function check() {
-        fetch('<?= Pages::toURL(Pages::IS_UPDATE) ?>')
-            .then(response => response.json())
-            .then(data => {
-                if (data.status === "noUpdate") {
-
-                }
-            });
-    }
-    function noUpdate() {
-        if(id===null){
-            return;
-        }
-        document.getElementById("isUpdate").style.display = "block";
-        clearInterval(id);
-        id=null;
-        if(confirm("An event has just occurred, do you want to refresh the page?")){
-            location.reload();
-        }
-    }
-</script>
 
 <div id="screen-right" class="container p-3">
 
@@ -352,7 +236,124 @@
               <input type="submit" value="Send message" class="btn btn-outline-secondary mt-2">
           </form>
       </div>
-  </div>
 </div>
+<script type="application/javascript">
+    console.log("test");
+    let id = setInterval(check, 2000);
+    function check() {
+        fetch('<?= Pages::toURL(Pages::IS_UPDATE) ?>')
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === "noUpdate") {
+
+                }
+            });
+    }
+    function noUpdate() {
+        if(id===null){
+            return;
+        }
+        document.getElementById("isUpdate").style.display = "block";
+        clearInterval(id);
+        id=null;
+        if(confirm("An event has just occurred, do you want to refresh the page?")){
+            location.reload();
+        }
+    }
+    let user = {
+        id: <?= $user->getId() ?>,
+        x: <?= $user->getX() ?>,
+        y: <?= $user->getY() ?>,
+        color: "<?= $user->getColor() ?>",
+        name: "<?= $user->getName() ?>",
+        levelIndustry: <?= $user->getLevelIndustry() ?>,
+        levelEnergy: <?= $user->getLevelEnergy() ?>,
+        nbCannon: <?= $user->getNbCannon() ?>,
+        nbOffensiveTroop: <?= $user->getNbOffensiveTroop() ?>,
+        nbLogisticTroop: <?= $user->getNbLogisticTroop() ?>,
+        nbIndustry: <?= $user->getNbIndustry() ?>,
+        nbEnergy: <?= $user->getNbEnergy() ?>,
+        costLevelUpIndustry: <?= json_encode($user->getCostLevelUpIndustry()) ?>,
+        costLevelUpEnergy: <?= json_encode($user->getCostLevelUpEnergy()) ?>,
+    };
+    let users = [
+        <?php foreach ($users as $u): ?>
+        {
+            id: <?= $u->getId() ?>,
+            x: <?= $u->getX() ?>,
+            y: <?= $u->getY() ?>,
+            color: "<?= $u->getColor() ?>",
+            name: "<?= $u->getName() ?>",
+            levelIndustry: <?= $u->getLevelIndustry() ?>,
+            levelEnergy: <?= $u->getLevelEnergy() ?>,
+            nbCannon: <?= $u->getNbCannon() ?>,
+            nbOffensiveTroop: <?= $u->getNbOffensiveTroop() ?>,
+            nbLogisticTroop: <?= $u->getNbLogisticTroop() ?>,
+        },
+        <?php endforeach; ?>
+    ];
+    function infoPlayer(id){
+        document.getElementById("playerInfo"+id).style.display = "block";
+        for (let i = 0; i < users.length; i++) {
+            if(users[i].id !== id){
+                document.getElementById("playerInfo"+users[i].id).style.display = "none";
+            }
+        }
+
+    }
+    let attacks = [
+        <?php foreach ($attackEvents as $a) {
+        if ($a->getStatus() == 0) {
+            echo '{';
+            echo 'id: ' . $a->getId() . ',';
+            echo 'startDate: Date.parse("' . $a->getStartDateTime()->format(DateTime::ATOM) . '"),';
+            echo 'finalDate: Date.parse("' . $a->getFinalDateTime()->format(DateTime::ATOM) . '"),';
+            echo 'startX: ' . $a->getAttackerX() . ',';
+            echo 'startY: ' . $a->getAttackerY() . ',';
+            echo 'finalX: ' . $a->getDefenderX() . ',';
+            echo 'finalY: ' . $a->getDefenderY() . ',';
+            echo 'moveX: ' . $a->getMovementPerSecond()[0] . ',';
+            echo 'moveY: ' . $a->getMovementPerSecond()[1] . ',';
+            echo '},';
+        }
+    }?>
+    ];
+    function reProcessPos() {
+        for(let i = 0; i < attacks.length; i++){
+            let dom = document.getElementById("attack-"+attacks[i].id);
+            let x = attacks[i].startX + (attacks[i].finalX - attacks[i].startX) * (Date.now() - attacks[i].startDate) / (attacks[i].finalDate - attacks[i].startDate);
+            let y = attacks[i].startY + (attacks[i].finalY - attacks[i].startY) * (Date.now() - attacks[i].startDate) / (attacks[i].finalDate - attacks[i].startDate);
+            dom.style.top = y*3+22+"px";
+            dom.style.left = x*3+27+"px";
+        }
+    }
+    function update() {
+        for(let i = 0; i < attacks.length; i++){
+            let dom = document.getElementById("attack-"+attacks[i].id);
+            let domInfo = document.getElementById("attack-info-"+attacks[i].id);
+            if(Date.now() > attacks[i].finalDate){
+                dom.style.display = "none";
+                domInfo.style.display = "none";
+                attacks.splice(i, 1);
+                i--;
+                noUpdate();
+            }
+            let x = parseFloat(dom.style.left);
+            let y = parseFloat(dom.style.top);
+            dom.style.top = (y+attacks[i].moveY/10)+"px";
+            dom.style.left = (x+attacks[i].moveX/10)+"px";
+            domInfo.style.top = (y+attacks[i].moveY/10+50)+"px";
+            domInfo.style.left = (x+attacks[i].moveX/10+27)+"px";
+        }
+    }
+    setInterval(update, 100);
+
+    function scrollbarPos(){
+        var messageBody = document.getElementById("messages");
+        messageBody.scrollTop = messageBody.scrollHeight - messageBody.clientHeight;
+    }
+    window.onload = scrollbarPos;
+
+</script>
 </body>
 </html>
