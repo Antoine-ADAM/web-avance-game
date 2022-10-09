@@ -4,7 +4,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" href="/public/css/style.css">
 </head>
-<body>
+<body style="background: url('/public/img/home_background.jpg') no-repeat;background-size: cover;">
     <nav class="navbar navbar-dark bg-dark">
       <div class="container-fluid">
         <div class="text-light mx-auto h2">Home</div>
@@ -14,7 +14,7 @@
     <div class="text-center p-4">
         <?php Alert::displayAlerts() ?>
     </div>
-    <div class="container p-3 border" style="max-width: 700px;">
+    <div class="container p-3 border" style="max-width: 700px;background-color: #8ea3a3;border-radius: 25px;">
         <div class="row justify-content-center mt-5 w-100">
             <div class="col-4">
                 <form action="<?= Pages::toURL(Pages::LOGIN) ?>" style="text-align: right;" method="post">

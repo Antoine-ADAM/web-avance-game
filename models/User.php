@@ -256,7 +256,7 @@ UPDATE last_update SET last_update = NOW() WHERE 1;");
         return false;
     }
 
-    private function getCostCannon($nbCannon)
+    public function getCostCannon($nbCannon)
     {
         if($nbCannon + $this->nbCannon > 2000000000){
             return null;
@@ -276,7 +276,7 @@ UPDATE last_update SET last_update = NOW() WHERE 1;");
         return false;
     }
 
-    private function getCostOffensiveTroop($nbOffensiveTroop)
+    public function getCostOffensiveTroop($nbOffensiveTroop)
     {
         if($nbOffensiveTroop + $this->nbOffensiveTroop > 2000000000){
             return null;
@@ -296,7 +296,7 @@ UPDATE last_update SET last_update = NOW() WHERE 1;");
         return false;
     }
 
-    private function getCostLogisticTroop($nbLogisticTroop)
+    public function getCostLogisticTroop($nbLogisticTroop)
     {
         if($nbLogisticTroop + $this->nbLogisticTroop > 2000000000){
             return null;
