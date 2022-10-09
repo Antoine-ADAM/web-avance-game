@@ -325,16 +325,20 @@
           <?php
             foreach($messages as $msg){
                 if($msg->getType() == 0){
-                    ?><div class="bg-white"><?php
-                    echo '<u>'.$msg->getDate().'</u><br>';
-                    echo $usersById[$msg->getIdSender()]->getName().': ';
-                    echo $msg->getContent().'<hr class="mb-0" style="border-top: 2px solid #000000;">';
-                    ?></div><?php
+                    ?>
+                    <div class="bg-white">
+                        <u><?=$msg->getDate()?></u><br>
+                        <?=$usersById[$msg->getIdSender()]->getName()?>: <?=$msg->getContent()?>
+                        <hr class="mb-0" style="border-top: 2px solid #000000;">
+                    </div><?php
                 }else if($msg->getType() == 1){
-                    ?><div style="background-color: #f2f2f2;"><?php
-                    echo '<u>'.$msg->getDate().'</u><br>';
-                    echo $msg->getContent().'<hr class="mb-0" style="border-top: 2px solid #000000;">';
-                    ?></div><?php
+                    ?>
+                    <div style="background-color: #f2f2f2;">
+                    <u><?=$msg->getDate()?></u><br>
+                    <?=$msg->getContent()?>
+                    <hr class="mb-0" style="border-top: 2px solid #000000;">
+                    </div>
+                    <?php
                 }
             }
           ?>
