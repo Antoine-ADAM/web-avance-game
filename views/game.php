@@ -20,7 +20,7 @@
   </div>
 </nav>
 
-<div class="alert alert-info" style="display: none" id="isUpdate">
+<div class="alert alert-info" style="display: none; z-index: 1000000000" id="isUpdate">
     An event has just occurred, refresh the page to see it !
 </div>
 
@@ -134,12 +134,15 @@
         if ($a->getStatus() == 0){
             $color = $usersById[$a->getAttackerId()]->getColor();
         ?>
-    <div id="attack-<?= $a->getId() ?>" style="position: absolute; top: <?= $a->actualPosition()[0]*3?>px;left: <?= $a->actualPosition()[1]*3?>px;transform: translate(-50%, -50%) rotate(<?= $a->getAngle() ?>deg);height: 90px;width: 110px;">
+    <div id="attack-<?= $a->getId() ?>" style="position: absolute; top: <?= $a->actualPosition()[1]*3-22?>px;left: <?= $a->actualPosition()[0]*3-27?>px;transform: translate(-50%, -50%) rotate(<?= $a->getAngle() ?>deg);height: 90px;width: 110px;">
         <div style="position: absolute;background-color: <?= $color ?>;border-radius: 110px;top: 10px;left: 10px;bottom: 10px;right: 10px;opacity: 0.3;box-shadow: 0 0 30px 30px <?= $color ?>"></div>
         <img src="public/img/fourmis.gif" alt="" height="60px" style="position: absolute;top: 30px;left: 0">
         <img src="public/img/fourmis.gif" alt="" height="60px" style="position: absolute;top: 0;left:30px">
         <img src="public/img/fourmis.gif" alt="" height="60px" style="position: absolute;top: 30px;left:60px">
     </div>
+            <div id="attack-info-<?= $a->getId() ?>" style="position: absolute; top: <?= $a->actualPosition()[1]*3+50?>px;left: <?= $a->actualPosition()[0]*3-27?>px;transform: translate(-50%, -50%) rotate(<?= $a->getAngle() ?>deg);width: 110px;">
+                <?=$a->getNbCannon()?>💣 <?=$a->getNbOffensiveTroop()?>💪 <?=$a->getNbLogisticTroop()?>🚚
+            </div>
     <?php }} ?>
 </div>
 
@@ -193,32 +196,70 @@
                 echo 'id: ' . $a->getId() . ',';
                 echo 'startDate: Date.parse("' . $a->getStartDateTime()->format(DateTime::ATOM) . '"),';
                 echo 'finalDate: Date.parse("' . $a->getFinalDateTime()->format(DateTime::ATOM) . '"),';
+                echo 'startX: ' . $a->getAttackerX() . ',';
+                echo 'startY: ' . $a->getAttackerY() . ',';
+                echo 'finalX: ' . $a->getDefenderX() . ',';
+                echo 'finalY: ' . $a->getDefenderY() . ',';
                 echo 'moveX: ' . $a->getMovementPerSecond()[0] . ',';
                 echo 'moveY: ' . $a->getMovementPerSecond()[1] . ',';
                 echo '},';
             }
         }?>
     ];
-    console.log(attacks);
-    function update() {
-        console.log("update");
+    function reProcessPos() {
         for(let i = 0; i < attacks.length; i++){
             let dom = document.getElementById("attack-"+attacks[i].id);
-            let xLeft = parseFloat(dom.style.left);
-            let yTop = parseFloat(dom.style.top);
-            dom.style.left = xLeft + attacks[i].moveX + "px";
-            dom.style.top = yTop + attacks[i].moveY + "px";
-            console.log(xLeft);
-            console.log(yTop);
+            let x = attacks[i].startX + (attacks[i].finalX - attacks[i].startX) * (Date.now() - attacks[i].startDate) / (attacks[i].finalDate - attacks[i].startDate);
+            let y = attacks[i].startY + (attacks[i].finalY - attacks[i].startY) * (Date.now() - attacks[i].startDate) / (attacks[i].finalDate - attacks[i].startDate);
+            dom.style.top = y*3+22+"px";
+            dom.style.left = x*3+27+"px";
         }
     }
-    setInterval(update, 1000);
+    function update() {
+        for(let i = 0; i < attacks.length; i++){
+            let dom = document.getElementById("attack-"+attacks[i].id);
+            let domInfo = document.getElementById("attack-info-"+attacks[i].id);
+            if(Date.now() > attacks[i].finalDate){
+                dom.style.display = "none";
+                domInfo.style.display = "none";
+                attacks.splice(i, 1);
+                i--;
+                noUpdate();
+            }
+            let x = parseFloat(dom.style.left);
+            let y = parseFloat(dom.style.top);
+            dom.style.top = (y+attacks[i].moveY/10)+"px";
+            dom.style.left = (x+attacks[i].moveX/10)+"px";
+            domInfo.style.top = (y+attacks[i].moveY/10+50)+"px";
+            domInfo.style.left = (x+attacks[i].moveX/10+27)+"px";
+        }
+    }
+    setInterval(update, 100);
 
     function scrollbarPos(){
         var messageBody = document.getElementById("messages");
         messageBody.scrollTop = messageBody.scrollHeight - messageBody.clientHeight;
     }
     window.onload = scrollbarPos;
+    let id = setInterval(check, 2000);
+    function check() {
+        fetch('<?= Pages::toURL(Pages::IS_UPDATE) ?>')
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === "noUpdate") {
+
+                }
+            });
+    }
+    function noUpdate() {
+        if(id===null){
+            return;
+        }
+        document.getElementById("isUpdate").style.display = "block";
+        clearInterval(id);
+        id=null;
+        alert("An event has just occurred, refresh the page to see it !");
+    }
 </script>
 
 <div id="screen-right" class="container p-3">
@@ -307,20 +348,5 @@
       </div>
   </div>
 </div>
-
-<script type="application/javascript">
-    const id = setInterval(check, 2000);
-    function check() {
-        fetch('<?= Pages::toURL(Pages::IS_UPDATE) ?>')
-            .then(response => response.json())
-            .then(data => {
-                if (data.status === "noUpdate") {
-                    document.getElementById("isUpdate").style.display = "block";
-                    clearInterval(id);
-                    alert("An event has just occurred, refresh the page to see it !");
-                }
-            });
-    }
-</script>
 </body>
 </html>

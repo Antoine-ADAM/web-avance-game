@@ -10,8 +10,11 @@ function init(){
     //date_default_timezone_set('Europe/Paris'); comment for compare with db
     session_start();
     if (isset($_SESSION["id"])){
+        if($_GET["page"] == Pages::IS_UPDATE){
+            return;
+        }
         $user = User::getUserById($_SESSION["id"]);
-        if ($user != null && (!isset($_GET["page"]) || $_GET["page"] != Pages::IS_UPDATE)){
+        if ($user != null && !isset($_GET["page"])){
             User::updateNbIndustryAll();
             AttackEvent::updateEvent();
             $_SESSION["user"] = $user;
@@ -21,7 +24,7 @@ function init(){
 }
 
 function isLogged(){
-    return isset($_SESSION["user"]);
+    return isset($_SESSION["id"]);
 }
 
 function checkLogged(){
