@@ -70,26 +70,26 @@
 </div>
 
 <div id="info">
-    <div class="container row">
-        <ul class="col">
+    <div class="row">
+        <ul class="col" style="list-style: none">
             <li>🏭 Industry level: <?= $user->getLevelIndustry() ?></li>
             <li>☢️ Energy level: <?= $user->getLevelEnergy() ?></li>
         </ul>
-        <ul class="col">
-            <li>Canoon amount: <?= $user->getNbCannon() ?>💣</li>
-            <li>Offensive troop amount: <?= $user->getNbOffensiveTroop() ?>💪</li>
-            <li>Logistic troop amount: <?= $user->getNbLogisticTroop() ?>🚚</li>
+        <ul class="col" style="list-style: none">
+            <li>Canoon: <?= $user->getNbCannon() ?>💣</li>
+            <li>Offensive troop: <?= $user->getNbOffensiveTroop() ?>💪</li>
+            <li>Logistic troop: <?= $user->getNbLogisticTroop() ?>🚚</li>
         </ul>
-        <ul class="col">
-            <li>Industry amount: <?= $user->getNbIndustry() ?>🔧</li>
-            <li>Energy amount: <?= $user->getNbEnergy() ?>⚡</li>
+        <ul class="col" style="list-style: none">
+            <li>Industry: <?= $user->getNbIndustry() ?>🔧</li>
+            <li>Energy: <?= $user->getNbEnergy() ?>⚡</li>
         </ul>
-        <ul class="col">
+        <ul class="col" style="list-style: none">
             <li>📍 Coordinates:</li>
             x: <?=$user->getX()?>
             y: <?=$user->getY()?>
         </ul>
-        <ul class="col">
+        <ul class="col" style="list-style: none">
             <div class="h-100"><?php Alert::displayAlerts() ?></div>
         </ul>
     </div>
@@ -98,22 +98,46 @@
 <div id="screen-left" class="container p-3">
     <u><b>🛒 Shop</b></u>
     <form action="<?= Pages::toURL(Pages::PURCHASE) ?>" method="post">
-        <label class="mt-2">15🔧 2⚡</label>
-        <input type="hidden" name="type" value="cannon">
-        <input type="number" name="nb" min="0" max="1999999999" value="1" class="form-control">
-        <input type="submit" value="Buy cannon" class="btn btn-outline-secondary mt-2">
+        <?php if(!is_null($user->getCostCannon(1))){?>
+            <label class="mt-2"><?= $user->getCostCannon(1)[0]?>🔧 <?= $user->getCostCannon(1)[1] ?>⚡</label>
+            <input type="hidden" name="type" value="cannon">
+            <input type="number" name="nb" min="0" max="1999999999" value="1" class="form-control">
+            <input type="submit" value="Buy cannon" class="btn btn-outline-secondary mt-2">
+        <?php
+        }else{
+            ?>
+            <button class="btn btn-outline-secondary mt-2 disabled w-100">Too much cannon</button>
+            <?php
+        }
+        ?>
     </form>
     <form action="<?= Pages::toURL(Pages::PURCHASE) ?>" method="post">
-        <label class="mt-2">10🔧 0⚡</label>
-        <input type="hidden" name="type" value="offensiveTroop">
-        <input type="number" name="nb" min="0" max="1999999999" value="1" class="form-control">
-        <input type="submit" value="Buy offensive troop" class="btn btn-outline-secondary mt-2">
+        <?php if(!is_null($user->getCostOffensiveTroop(1))){?>
+            <label class="mt-2"><?= $user->getCostOffensiveTroop(1)[0]?>🔧 <?= $user->getCostOffensiveTroop(1)[1] ?>⚡</label>
+            <input type="hidden" name="type" value="offensiveTroop">
+            <input type="number" name="nb" min="0" max="1999999999" value="1" class="form-control">
+            <input type="submit" value="Buy offensive troop" class="btn btn-outline-secondary mt-2">
+        <?php
+        }else{
+            ?>
+            <button class="btn btn-outline-secondary mt-2 disabled">Too much offensive troop</button>
+            <?php
+        }
+        ?>
     </form>
     <form action="<?= Pages::toURL(Pages::PURCHASE) ?>" method="post">
-        <label class="mt-2">10🔧 0⚡</label>
-        <input type="hidden" name="type" value="logisticTroop">
-        <input type="number" min="0" max="1999999999" name="nb" value="1" class="form-control">
-        <input type="submit" value="Buy logistic troop" class="btn btn-outline-secondary mt-2">
+        <?php if(!is_null($user->getCostLogisticTroop(1))){?>
+            <label class="mt-2"><?= $user->getCostLogisticTroop(1)[0]?>🔧 <?= $user->getCostLogisticTroop(1)[1] ?>⚡</label>
+            <input type="hidden" name="type" value="logisticTroop">
+            <input type="number" name="nb" min="0" max="1999999999" value="1" class="form-control">
+            <input type="submit" value="Buy logistic troop" class="btn btn-outline-secondary mt-2">
+        <?php
+        }else{
+            ?>
+            <button class="btn btn-outline-secondary mt-2 disabled">Too much logistic troop</button>
+            <?php
+        }
+        ?>
     </form>
     <hr>
     <u><b>🆙 Level Up</b></u>
@@ -201,7 +225,6 @@
     foreach ($attackEvents as $attackEvent) {
         if($attackEvent->getIdAttacker() == $user->getId() AND $attackEvent->getStatus() == 0){
             echo "To: ".$usersById[$attackEvent->getIdDefender()]->getName();
-            echo " ".$attackEvent->getStatus();
             $attackCountTmp++;
         }
     }
@@ -264,7 +287,7 @@
                     </div><?php
                 }else if($msg->getType() == 1){
                     ?>
-                    <div style="background-color: #f2f2f2;">
+                    <div style="background-color: #fcdbbb;">
                     <u><?=$msg->getDate()?></u><br>
                     <?=$msg->getContent()?>
                     <hr class="mb-0" style="border-top: 2px solid #000000;">

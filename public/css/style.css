@@ -1,13 +1,18 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@200;300;400;500;600;700&display=swap');
+
 body{
-  background-color: #f0fcfc;
+  /*background-color: #f0fcfc;*/
+  background: url('/public/img/game_background.png');
+  background-size: cover;
   font-family: 'Roboto',sans-serif;
+  height: 100%;
 }
+
 #info{
    z-index: 1;
-   /*border: 1px solid black;*/
+   border: 1px solid black;
    width: 1500px;
-   height: 102px;
+   height: 104px;
    position: fixed;
    left: calc((100% - 1500px) / 2);
    top: 62px;
@@ -19,7 +24,7 @@ body{
   left: calc((100% - 1900px) / 2);
   position: fixed;
   background-color: #f0fcfc;
-  /*border: 1px solid blue;*/
+  border: 1px solid black;
   width: 200px;
   /*height: 500px;*/
 }
@@ -39,7 +44,7 @@ body{
   right: calc((100% - 1900px) / 2);
   position: fixed;
   background-color: #f0fcfc;
-  /*border: 1px solid green;*/
+  border: 1px solid black;
   width: 200px;
   /*height: 500px;*/
 }
