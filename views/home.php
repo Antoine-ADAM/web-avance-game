@@ -47,7 +47,7 @@
                         <span id='message'></span>
                     </div>
                     <div class="form-outline mb-4">
-                        <input type="color" name="color" placeholder="color" required>
+                        <input id="color" type="color" name="color" placeholder="color" required>
                     </div>
                     <input type="submit" value="Register" class="btn btn-primary btn-block mb-4">
                 </form>
@@ -67,6 +67,15 @@
             return false;
           }
         }
+        function randomColor(){
+            var letters = '0123456789ABCDEF';
+            var color = '#';
+            for (var i = 0; i < 6; i++) {
+              color += letters[Math.floor(Math.random() * 16)];
+            }
+            document.getElementById("color").value = color;
+        }
+        randomColor();
     </script>
 </body>
 </html>
