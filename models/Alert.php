@@ -20,7 +20,7 @@ class Alert
                 $_SESSION["alerts"] = [];
             }
             $_SESSION["alerts"][] = [
-                "message" => $message,
+                "message" => htmlspecialchars($message),
                 "type" => self::TYPES[$type]
             ];
         }
