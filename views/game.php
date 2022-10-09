@@ -7,13 +7,58 @@
     <link rel="stylesheet" href="/public/css/style.css">
 </head>
 <body>
-
+<div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Scoreboard TOP 10</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th scope="col">Rank</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Score</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <?php
+                    $scores = [];
+                    foreach ($users as $u) {
+                        $scores[$u->getName()] = $u->getScores();
+                    }
+                    arsort($scores);
+                    $max = 10;
+                    if(count($scores) < 10) {
+                        $max = count($scores);
+                    }
+                    $i = 0;
+                    foreach ($scores as $name => $score) {
+                        if ($i < $max) {
+                            echo "<tr><td>#$i</td><td>$name</td><td>$score</td></tr>";
+                        }else{
+                            break;
+                        }
+                        $i++;
+                    }
+                    ?>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 <nav class="navbar navbar-dark bg-dark fixed-top">
   <div class="container-fluid">
     <span class="navbar-text">
       <?= $user->getName(); ?>
     </span>
-    <div class="text-light mx-auto h2">Game</div>
+    <div class="text-light mx-auto h2"><a id="modal-button">Game</a></div>
     <span class="navbar-text">
       <a href="<?= Pages::toURL(Pages::LOGOUT) ?>">Logout</a>
     </span>
@@ -237,7 +282,14 @@
           </form>
       </div>
 </div>
+<!-- JavaScript Bundle with Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
 <script type="application/javascript">
+    const myModal = new bootstrap.Modal(document.getElementById('myModal'))
+    function showModal(){
+        myModal.show();
+    }
+    document.getElementById("modal-button").addEventListener("click", showModal);
     console.log("test");
     let id = setInterval(check, 2000);
     function check() {
@@ -340,13 +392,13 @@
             }
             let x = parseFloat(dom.style.left);
             let y = parseFloat(dom.style.top);
-            dom.style.top = (y+attacks[i].moveY)+"px";
-            dom.style.left = (x+attacks[i].moveX)+"px";
-            domInfo.style.top = (y+attacks[i].moveY+50)+"px";
-            domInfo.style.left = (x+attacks[i].moveX+27)+"px";
+            dom.style.top = (y+attacks[i].moveY/10)+"px";
+            dom.style.left = (x+attacks[i].moveX/10)+"px";
+            domInfo.style.top = (y+attacks[i].moveY/10+50)+"px";
+            domInfo.style.left = (x+attacks[i].moveX/10+27)+"px";
         }
     }
-    setInterval(update, 1000);
+    setInterval(update, 100);
 
     function scrollbarPos(){
         var messageBody = document.getElementById("messages");
